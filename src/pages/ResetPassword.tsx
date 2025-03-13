@@ -1,5 +1,3 @@
-import { Link } from "react-router";
-
 import LoginImage from "../assets/login-img.svg";
 import FormInput from "../components/FormInput";
 import FormSubmit from "../components/FormSubmit";
@@ -10,7 +8,8 @@ function handleSubmit(formData: FormData) {
   console.log(data)
 }
 
-function Signup() {
+
+function ResetPassword() {
   return (
     <>
       <div className="flex items-center justify-center h-screen">
@@ -19,21 +18,13 @@ function Signup() {
             <img src={LoginImage} alt="LoginLogo" className="size-96" />
           </div>
           <div className="ml-5 w-full">
-            <h1 className="text-xl font-bold w-full text-center">Signup</h1>
+            <h1 className="text-xl font-bold w-full text-center">Reset Password</h1>
             <form className="mt-4 space-y-3" action={handleSubmit}>
-              <FormInput name="email" labelName="Email"/>
-              <FormInput name="first_name" labelName="First Name"/>
-              <FormInput name="last_name" labelName="Last Name"/>
+              <FormInput name="token" labelName="Token"/>
               <FormInput name="password" labelName="Password" type="password"/>
               <FormInput name="password_confirmation" labelName="Password Confirmation" type="password"/>
 
-              <FormSubmit name="Sign Up"/>
-
-              <div className="w-full items-center">
-                <p className="align-middle mt-4 w-full text-center">
-                  Already have an Account? <Link to="/login" className="text-blue-500 underline hover:text-blue-800">Log In.</Link>
-                </p>
-              </div>
+              <FormSubmit name="Reset Password"/>
             </form>
           </div>
         </div>
@@ -42,4 +33,4 @@ function Signup() {
   );
 }
 
-export default Signup;
+export default ResetPassword;
