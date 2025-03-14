@@ -20,7 +20,7 @@ function ForgotPassword() {
           <div className="ml-5 w-full">
             <h1 className="text-xl font-bold w-full text-center">Forgot Password</h1>
             <form className="mt-4 space-y-3" action={handleSubmit}>
-              <FormInput name="email" labelName="Email"/>
+              <FormInput name="email" labelName="Email" required={true} />
 
               <FormSubmit name="Request Token"/>
             </form>

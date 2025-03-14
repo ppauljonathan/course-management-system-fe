@@ -22,8 +22,8 @@ function Login() {
           <div className="ml-5 w-full">
             <h1 className="text-xl font-bold w-full text-center">Login</h1>
             <form className="mt-4 space-y-3" action={handleSubmit}>
-              <FormInput name="email" labelName="Email"/>
-              <FormInput name="password" labelName="Password" type="password"/>
+              <FormInput name="email" labelName="Email" required={true} />
+              <FormInput name="password" labelName="Password" type="password" required={true} />
 
               <FormSubmit name="Log In"/>
 

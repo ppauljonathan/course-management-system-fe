@@ -2,9 +2,9 @@ import { NavLink } from "react-router";
 import { ReactNode } from "react";
 
 interface NavItemProps {
-  name: string
-  icon: ReactNode
-  linkTo: string
+  name: string;
+  icon: ReactNode;
+  linkTo: string;
 }
 
 function NavItem({ name, icon, linkTo }: NavItemProps) {

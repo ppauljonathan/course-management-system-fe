@@ -20,9 +20,9 @@ function ResetPassword() {
           <div className="ml-5 w-full">
             <h1 className="text-xl font-bold w-full text-center">Reset Password</h1>
             <form className="mt-4 space-y-3" action={handleSubmit}>
-              <FormInput name="token" labelName="Token"/>
-              <FormInput name="password" labelName="Password" type="password"/>
-              <FormInput name="password_confirmation" labelName="Password Confirmation" type="password"/>
+              <FormInput name="token" labelName="Token" required={true} />
+              <FormInput name="password" labelName="Password" type="password" required={true} />
+              <FormInput name="password_confirmation" labelName="Password Confirmation" type="password" required={true} />
 
               <FormSubmit name="Reset Password"/>
             </form>
