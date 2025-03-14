@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import ThemeToggle from './components/ThemeToggle';
 
 function App() {
 
@@ -27,9 +28,12 @@ function App() {
 
   return (
     <>
-      <LeftNav />
-      <div className='h-full w-full ml-5 overflow-scroll'>
-        {routes}
+      <div className="h-dvh w-dvw flex dark:bg-gray-900 dark:text-white">
+        <LeftNav />
+        <div className='h-full w-full ml-5 overflow-y-scroll'>
+          {routes}
+        </div>
+        <ThemeToggle />
       </div>
     </>
   );

@@ -13,7 +13,7 @@ function handleSubmit(formData: FormData) {
 function Signup() {
   return (
     <>
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex items-center justify-center h-full">
         <div className="p-5 border-2 rounded-2xl w-4xl flex items-center">
           <div className="align-middle">
             <img src={LoginImage} alt="LoginLogo" className="size-96" />
