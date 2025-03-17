@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 
 import LoginImage from "../assets/login-img.svg";
 import FormInput from "../components/FormInput";
@@ -8,7 +8,6 @@ import signup from "../queries/signup";
 import sendGraphqlRequest from "../utils/graphqlHandler";
 import UserWithJWTInterface from "../interfaces/graphql/users/userWithJWTInterface";
 import ErrorInterface from "../interfaces/graphql/common/errorInterface";
-import isAuthenticated from "../utils/isAuthenticated";
 
 interface SignupResponse {
   data: { signup: UserWithJWTInterface };
@@ -31,14 +30,6 @@ function Signup() {
     password: "",
     password_confirmation: "",
   });
-
-  useEffect(() => {
-    isAuthenticated()
-    .then((authenticated) => {
-      if(authenticated) { navigate('/') }
-    })
-  }, [navigate])
-
 
   function updateFormState(e: ChangeEvent) {
     setFormState((prev) => ({

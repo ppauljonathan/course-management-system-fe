@@ -1,16 +1,10 @@
-import { HomeIcon, UserIcon } from '@heroicons/react/24/solid'
-import { InformationCircleIcon } from '@heroicons/react/24/outline'
+import { HomeIcon, UserIcon } from "@heroicons/react/24/solid";
+import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { NavLink } from "react-router";
 
-import AppLogo from '../../assets/logo.svg'
-import NavItem from './NavItem';
-
-
-const navList = [
-  { name: "Home", icon: <HomeIcon className="size-6" />, linkTo: '/' },
-  { name: "About", icon: <InformationCircleIcon className="size-6" />, linkTo: '/about' },
-  { name: "Signup", icon: <UserIcon className="size-6" />, linkTo: '/signup' },
-];
+import AppLogo from "../../assets/logo.svg";
+import NavItem from "./NavItem";
+import isAuthenticated from "../../utils/isAuthenticated";
 
 function LeftNav() {
   return (
@@ -20,13 +14,33 @@ function LeftNav() {
           <NavLink to="/">
             <div className="p-5">
               <div className="flex">
-                <img src={AppLogo} alt="Courses"  className="size-6"/>
-                <p className="ml-5 hidden group-hover/nav:block font-extrabold">CMSystem</p>
+                <img src={AppLogo} alt="Courses" className="size-6" />
+                <p className="ml-5 hidden group-hover/nav:block font-extrabold">
+                  CMSystem
+                </p>
               </div>
             </div>
           </NavLink>
         </li>
-        { navList.map((item, index) => <NavItem key={index} {...item}/>) }
+        <NavItem
+          name="Home"
+          icon={<HomeIcon className="size-6" />}
+          linkTo="/"
+        />
+        {isAuthenticated() && (
+          <NavItem
+            name="About"
+            icon={<InformationCircleIcon className="size-6" />}
+            linkTo="/about"
+          />
+        )}
+        {!isAuthenticated() && (
+          <NavItem
+            name="Login"
+            icon={<UserIcon className="size-6" />}
+            linkTo="/login"
+          />
+        )}
       </ul>
     </nav>
   );
