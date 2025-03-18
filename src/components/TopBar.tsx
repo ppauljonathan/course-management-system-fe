@@ -1,9 +1,13 @@
 import { UserCircleIcon, ArrowRightStartOnRectangleIcon } from "@heroicons/react/24/outline";
-import useAuthUser from "../hooks/useAuthUser";
-import { useNavigate } from "react-router";
 
-function TopBar() {
-  const user = useAuthUser();
+import { useNavigate } from "react-router";
+import UserInterface from '../interfaces/graphql/users/userInterface.tsx'
+
+interface TopBarProps {
+  user: UserInterface
+}
+
+function TopBar({ user }: TopBarProps) {
   const userFullName = [user?.first_name, user?.last_name]
     .filter(Boolean)
     .join(" ");
