@@ -12,7 +12,7 @@ import ThemeToggle from './components/ThemeToggle';
 import UnAuthRoute from './components/UnAuthRoute';
 import ProtectedRoute from './components/ProtectedRoute';
 import Logout from './pages/Logout';
-import TopBar from './components/LeftNav/TopBar';
+import TopBar from './components/TopBar';
 import useAuthUser from './hooks/useAuthUser';
 
 function App() {
