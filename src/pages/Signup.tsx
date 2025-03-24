@@ -11,7 +11,7 @@ import ErrorInterface from "../interfaces/graphql/common/errorInterface";
 
 interface SignupResponse {
   data: { signup: UserWithJWTInterface };
-  errors?: [ErrorInterface]
+  errors?: [ErrorInterface];
 }
 
 function Signup() {
@@ -62,12 +62,14 @@ function Signup() {
       console.log(errors);
       return;
     }
+
     const { jwt, errors: userErrors } = data.signup;
 
     if (userErrors.length > 0) {
       assignErrorMessages(userErrors);
       return;
     }
+
     localStorage.setItem("accessToken", jwt);
     navigate('/');
   }

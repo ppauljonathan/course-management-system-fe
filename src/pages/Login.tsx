@@ -54,12 +54,14 @@ function Login() {
       console.log(errors);
       return;
     }
+
     const { jwt, errors: userErrors } = data.login;
 
     if (userErrors.length > 0) {
       assignErrorMessages(userErrors);
       return;
     }
+
     localStorage.setItem("accessToken", jwt);
     navigate("/");
   }
