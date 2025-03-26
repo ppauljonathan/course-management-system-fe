@@ -8,6 +8,7 @@ import ErrorInterface from "../interfaces/graphql/common/errorInterface";
 import sendGraphqlRequest from "../utils/graphqlHandler";
 import login from "../queries/login";
 import UserWithJWTInterface from "../interfaces/graphql/users/userWithJWTInterface";
+import useToast from "../hooks/useToast";
 
 interface LoginResponse {
   data: { login: UserWithJWTInterface };
@@ -16,6 +17,7 @@ interface LoginResponse {
 
 function Login() {
   const navigate = useNavigate();
+  const { showToast } = useToast();
   const [formState, setFormState] = useState({
     email: "",
     password: "",
@@ -51,7 +53,7 @@ function Login() {
 
   function handleGraphqlResponse({ data, errors }: LoginResponse) {
     if (errors && errors.length > 0) {
-      console.log(errors);
+      showToast(errors.join(', '), 'error');
       return;
     }
 
@@ -63,6 +65,7 @@ function Login() {
     }
 
     localStorage.setItem("accessToken", jwt);
+    showToast('Login Successful', 'success');
     navigate("/");
   }
 

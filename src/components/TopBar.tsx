@@ -14,22 +14,22 @@ function TopBar({ user }: TopBarProps) {
     .join(" ");
 
   const navigate = useNavigate()
-  const { showToast, toast } = useToast();
+  const { showToast } = useToast();
 
   return (
     <>
       <div className="h-12 flex bg-white dark:bg-gray-800 shadow-lg">
         <div className="flex ml-auto mr-2">
-          <div className="self-center flex hover:bg-gray-300 p-3 cursor-pointer">
+          <div className="self-center flex hover:bg-gray-300 p-3 cursor-pointer dark:hover:bg-gray-600">
             <UserCircleIcon className="size-8 self-center" />
             <p className="self-center ml-2">{userFullName}</p>
           </div>
           <div
-            className="self-center flex hover:bg-gray-300 p-3 cursor-pointer"
+            className="self-center flex hover:bg-gray-300 p-3 cursor-pointer dark:hover:bg-gray-600"
             onClick={
               () => {
                 navigate('/logout')
-                showToast("Logged out Successfully")
+                showToast("Logged out Successfully", 'success')
               }
             }
           >
@@ -38,7 +38,6 @@ function TopBar({ user }: TopBarProps) {
           </div>
         </div>
       </div>
-      {toast}
     </>
   );
 }

@@ -1,4 +1,7 @@
+import useToast from "../hooks/useToast"
+
 function About() {
+  const { showToast } = useToast();
   return(
     <>
       <h1 className="text-2xl font-extrabold">About Us</h1>
@@ -21,6 +24,11 @@ function About() {
       <p className="text-lg">
         Neque fringilla cursus aptent sagittis malesuada vel. Viverra per efficitur orci ligula inceptos nascetur magnis porta pharetra. Venenatis nisl hac ultricies ac porta nisl sociosqu quis ad. Interdum malesuada orci augue habitasse habitant lectus per. Amet vitae aliquet habitasse senectus himenaeos venenatis. Tristique molestie ante morbi adipiscing montes taciti vehicula. Mollis dolor semper curabitur posuere aliquet. Nascetur orci aptent odio; ad placerat nisl sit. Turpis montes faucibus cursus metus phasellus hac ad ipsum nascetur. Vivamus aptent ullamcorper pulvinar class sapien viverra non.
       </p>
+
+      <button onClick={() => showToast('Default')} className="mt-5 p-5 rounded-2xl bg-blue-800 text-white">Show Default Toast</button>
+      <button onClick={() => showToast('Success', 'success')} className="mt-5 p-5 rounded-2xl bg-green-800 text-white">Show Default Toast</button>
+      <button onClick={() => showToast('Error', 'error')} className="mt-5 p-5 rounded-2xl bg-red-800 text-white">Show Default Toast</button>
+      <button onClick={() => showToast('Warning', 'warning')} className="mt-5 p-5 rounded-2xl bg-yellow-300 text-black">Show Default Toast</button>
     </>
   )
 }

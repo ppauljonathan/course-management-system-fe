@@ -8,6 +8,7 @@ import ErrorInterface from "../interfaces/graphql/common/errorInterface";
 import sendGraphqlRequest from "../utils/graphqlHandler";
 import resetPassword from "../queries/resetPassword";
 import UserWithJWTInterface from "../interfaces/graphql/users/userWithJWTInterface";
+import useToast from "../hooks/useToast";
 
 interface ResetPasswordResponse {
   data: { resetPassword: UserWithJWTInterface };
@@ -16,6 +17,7 @@ interface ResetPasswordResponse {
 
 function ResetPassword() {
   const navigate = useNavigate();
+  const { showToast } = useToast();
   const [formState, setFormState] = useState({
     token: '',
     password: '',
@@ -53,7 +55,7 @@ function ResetPassword() {
 
   function handleGraphqlResponse({ data, errors }: ResetPasswordResponse) {
      if(errors && errors.length > 0) {
-      console.log(errors);
+      showToast(errors.join(', '), 'error');
       return;
     }
 
@@ -65,6 +67,7 @@ function ResetPassword() {
     }
 
     localStorage.setItem("accessToken", jwt);
+    showToast('Password Reset Successfully', 'success');
     navigate('/');
 
   }
