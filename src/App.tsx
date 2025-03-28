@@ -23,6 +23,7 @@ function App() {
     <Routes>
       <Route>
         <Route path="/" element={<Home />} />
+        <Route path="/courses/:category" element={<Home />} />
         <Route element={< ProtectedRoute/>}>
           <Route path="/about" element={<About />} />
         </Route>
