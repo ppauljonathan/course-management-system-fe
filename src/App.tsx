@@ -14,6 +14,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Logout from './pages/Logout';
 import TopBar from './components/TopBar';
 import useAuthUser from './hooks/useAuthUser';
+import ServerError from './pages/ServerError'; 
 
 function App() {
   const user = useAuthUser();
@@ -33,6 +34,7 @@ function App() {
         </Route>
 
         <Route path="/logout" element={<Logout />} />
+        <Route path="/500" element={<ServerError />} />
       </Route>
 
       <Route path="*" element={<NotFound />} />
