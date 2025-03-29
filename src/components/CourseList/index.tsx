@@ -1,28 +1,80 @@
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router";
+
+import PaginationResponseInterface from "../../interfaces/graphql/common/paginationResponseInterface";
+import sendGraphqlRequest from "../../utils/graphqlHandler";
+import courseQuery from "../../queries/courses";
+import { PER_PAGE } from "../../utils/constants";
+import CourseInterface from "../../interfaces/graphql/courses/courseInterface";
+import CourseCard from "./CourseCard";
+import PageInfoInterface from "../../interfaces/graphql/common/pageInfoInterface";
+import PaginationBar from '../PaginationBar';
+import purchasedCourses from "../../queries/purchasedCourses";
+import createdCourses from "../../queries/createdCourses";
+
+interface coursesResponse {
+  data: { courses: PaginationResponseInterface }
+}
+
 function CourseList() {
+  const [searchParams] = useSearchParams();
+  const currentPage = Number(searchParams.get('page') || 1);
+  const [courses, setCourses] = useState<CourseInterface[] | undefined>([]);
+  const [pageInfo, setPageInfo] = useState<PageInfoInterface>();
+
+  useEffect(() => {
+    function fetchCourses() {
+      const query = setCourseQuery();
+
+      sendGraphqlRequest<coursesResponse>(
+        query,
+        {
+          page: currentPage,
+          per: PER_PAGE
+        },
+        displayCourses
+      )
+    }
+
+    fetchCourses();
+  }, [currentPage]);
+
+  function setCourseQuery() {
+    switch(location.pathname) {
+      case('/courses-list/purchased'):
+        return purchasedCourses;
+      case('/courses-list/created'):
+        return createdCourses;
+      default:
+        return courseQuery;
+    }
+  }
+
+  function displayCourses({ data: { courses: courseList } }: coursesResponse) {
+    setCourses(courseList.courses);
+    setPageInfo(courseList.pageInfo);
+  }
+
   return (
     <>
-      <div className="grid grid-cols-4 gap-5 mt-5 place-items-center">
-        <div className="w-64 h-32 p-5 border">1</div>
-        <div className="w-64 h-32 p-5 border">2</div>
-        <div className="w-64 h-32 p-5 border">3</div>
-        <div className="w-64 h-32 p-5 border">4</div>
-        <div className="w-64 h-32 p-5 border">5</div>
-        <div className="w-64 h-32 p-5 border">6</div>
-        <div className="w-64 h-32 p-5 border">7</div>
-        <div className="w-64 h-32 p-5 border">8</div>
-        <div className="w-64 h-32 p-5 border">9</div>
-        <div className="w-64 h-32 p-5 border">10</div>
-        <div className="w-64 h-32 p-5 border">11</div>
-        <div className="w-64 h-32 p-5 border">12</div>
-        <div className="w-64 h-32 p-5 border">13</div>
-        <div className="w-64 h-32 p-5 border">14</div>
-        <div className="w-64 h-32 p-5 border">15</div>
-        <div className="w-64 h-32 p-5 border">16</div>
-        <div className="w-64 h-32 p-5 border">17</div>
-        <div className="w-64 h-32 p-5 border">18</div>
-        <div className="w-64 h-32 p-5 border">19</div>
-        <div className="w-64 h-32 p-5 border">20</div>
-      </div>
+      {
+        (!courses || courses?.length == 0) &&
+        <p className="text-xl mt-5 w-full text-center">
+          No Courses Found
+        </p>
+      }
+      {
+        (courses && courses.length > 0) &&
+        <div className="mt-5 flex-col">
+          {
+            courses.map((course, index) => <CourseCard key={index} course={course} />)
+          }
+        </div>
+      }
+      {
+        pageInfo &&
+        <PaginationBar pageInfo={pageInfo} />
+      }
     </>
   )
 }

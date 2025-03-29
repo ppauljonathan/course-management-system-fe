@@ -14,12 +14,12 @@ function TabBar() {
       <div className="flex justify-around mt-5 mb-5 border">
         {   
           tabNames.map(([category, name], index) => {
-            const isActive = location.pathname === `/courses/${category}` ||
+            const isActive = location.pathname === `/courses-list/${category}` ||
               (category === "all" && location.pathname === "/");
 
             return (
               <NavLink
-                to={`/courses/${category}`}
+                to={`/courses-list/${category}`}
                 key={index}
                 className={`${tabClasses} ${isActive ? 'bg-gray-200 dark:bg-gray-600' : ''}`}
               >{name}</NavLink>
