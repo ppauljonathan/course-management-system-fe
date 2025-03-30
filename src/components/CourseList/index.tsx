@@ -65,7 +65,7 @@ function CourseList() {
       }
       {
         (courses && courses.length > 0) &&
-        <div className="mt-5 flex-col">
+        <div className="mt-5 flex flex-wrap">
           {
             courses.map((course, index) => <CourseCard key={index} course={course} />)
           }
