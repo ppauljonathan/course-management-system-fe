@@ -80,7 +80,7 @@ function Signup() {
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     resetErrorMessages();
-    sendGraphqlRequest(signup, { input: formState }, handleGraphqlResponse);
+    sendGraphqlRequest(signup, { input: formState }, handleGraphqlResponse, showToast);
   }
 
   return (

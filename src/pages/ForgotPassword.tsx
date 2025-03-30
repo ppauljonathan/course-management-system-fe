@@ -8,6 +8,7 @@ import ErrorInterface from "../interfaces/graphql/common/errorInterface";
 import UserWithResetTokenInterface from "../interfaces/graphql/users/userWithResetTokenInterface";
 import sendGraphqlRequest from "../utils/graphqlHandler";
 import requestPasswordReset from "../queries/requestPasswordReset";
+import useToast from "../hooks/useToast";
 
 interface ForgotPasswordResponse {
   data: { requestPasswordReset: UserWithResetTokenInterface };
@@ -15,6 +16,7 @@ interface ForgotPasswordResponse {
 }
 
 function ForgotPassword() {
+  const { showToast } = useToast();
   const [formState, setFormState] = useState({
     email: ''
   });
@@ -78,7 +80,7 @@ function ForgotPassword() {
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     resetErrorMessages();
-    sendGraphqlRequest(requestPasswordReset, { input: formState }, handleGraphqlResponse);
+    sendGraphqlRequest(requestPasswordReset, { input: formState }, handleGraphqlResponse, showToast);
   }
 
 

@@ -1,9 +1,12 @@
 import axios from "axios";
 
+import { ToastType } from "../utils/types";
+
 function sendGraphqlRequest<T>(
   query: string,
   variables: object,
-  callback: (data: T) => void
+  callback: (data: T) => void,
+  showToast: (message: string, type?: ToastType, duration?: number) => void
 ) {
   const jwt = localStorage.getItem("accessToken");
   const headers:Record<string, string> = {
@@ -20,6 +23,10 @@ function sendGraphqlRequest<T>(
     )
     .then(({ data, status }) => {
       if (status !== 200) {
+        showToast(
+          `an errror occurred on the server, CODE: ${status}`,
+          'error'
+        );
         console.log("error occurred on server", status);
         return;
       }
@@ -27,6 +34,10 @@ function sendGraphqlRequest<T>(
       callback(data);
     })
     .catch((err) => {
+      showToast(
+        `an errror occurred on the server, ${err.message}`,
+        'error'
+      );
       console.log("error occurred on server", err);
     });
 }

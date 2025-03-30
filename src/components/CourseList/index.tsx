@@ -11,6 +11,7 @@ import PageInfoInterface from "../../interfaces/graphql/common/pageInfoInterface
 import PaginationBar from '../PaginationBar';
 import purchasedCourses from "../../queries/purchasedCourses";
 import createdCourses from "../../queries/createdCourses";
+import useToast from "../../hooks/useToast";
 
 interface coursesResponse {
   data: { courses: PaginationResponseInterface }
@@ -22,6 +23,8 @@ function CourseList() {
   const [courses, setCourses] = useState<CourseInterface[] | undefined>([]);
   const [pageInfo, setPageInfo] = useState<PageInfoInterface>();
 
+  const { showToast } = useToast();
+
   useEffect(() => {
     function fetchCourses() {
       const query = setCourseQuery();
@@ -32,7 +35,8 @@ function CourseList() {
           page: currentPage,
           per: PER_PAGE
         },
-        displayCourses
+        displayCourses,
+        showToast
       )
     }
 

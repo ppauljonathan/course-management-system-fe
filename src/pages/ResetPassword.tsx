@@ -75,7 +75,7 @@ function ResetPassword() {
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     resetErrorMessages();
-    sendGraphqlRequest(resetPassword, { input: formState }, handleGraphqlResponse);
+    sendGraphqlRequest(resetPassword, { input: formState }, handleGraphqlResponse, showToast);
   }
 
   return (

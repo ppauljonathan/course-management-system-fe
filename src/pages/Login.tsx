@@ -72,7 +72,7 @@ function Login() {
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     resetErrorMessages();
-    sendGraphqlRequest(login, { input: formState }, handleGraphqlResponse);
+    sendGraphqlRequest(login, { input: formState }, handleGraphqlResponse, showToast);
   }
 
   return (
