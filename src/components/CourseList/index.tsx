@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router";
+import { useEffect, useMemo, useState } from "react";
+import { useLocation, useSearchParams } from "react-router";
 
 import PaginationResponseInterface from "../../interfaces/graphql/common/paginationResponseInterface";
 import sendGraphqlRequest from "../../utils/graphqlHandler";
@@ -14,10 +14,16 @@ import createdCourses from "../../queries/createdCourses";
 import useToast from "../../hooks/useToast";
 
 interface coursesResponse {
-  data: { courses: PaginationResponseInterface }
+  data: {
+    courses?: PaginationResponseInterface;
+    purchasedCourses?: PaginationResponseInterface;
+    createdCourses?: PaginationResponseInterface;
+  }
 }
 
+
 function CourseList() {
+  const { pathname } = useLocation();
   const [searchParams] = useSearchParams();
   const currentPage = Number(searchParams.get('page') || 1);
   const [courses, setCourses] = useState<CourseInterface[] | undefined>([]);
@@ -25,10 +31,25 @@ function CourseList() {
 
   const { showToast } = useToast();
 
+  const queryKey = useMemo(() => {
+    if(pathname === '/courses-list/purchased') return 'purchasedCourses';
+    if(pathname === '/courses-list/created') return 'createdCourses';
+
+    return 'courses';
+  }, [pathname]);
+
+  const query = useMemo(() => {
+    const queries = {
+      purchasedCourses: purchasedCourses,
+      createdCourses: createdCourses,
+      courses: courseQuery
+    }
+
+    return queries[queryKey];
+  }, [queryKey])
+
   useEffect(() => {
     function fetchCourses() {
-      const query = setCourseQuery();
-
       sendGraphqlRequest<coursesResponse>(
         query,
         {
@@ -40,32 +61,33 @@ function CourseList() {
       )
     }
 
-    fetchCourses();
-  }, [currentPage]);
-
-  function setCourseQuery() {
-    switch(location.pathname) {
-      case('/courses-list/purchased'):
-        return purchasedCourses;
-      case('/courses-list/created'):
-        return createdCourses;
-      default:
-        return courseQuery;
+    function displayCourses({ data }: coursesResponse) {
+      const courseList = data[queryKey] ;
+      setCourses(courseList?.courses);
+      setPageInfo(courseList?.pageInfo);
     }
-  }
 
-  function displayCourses({ data: { courses: courseList } }: coursesResponse) {
-    setCourses(courseList.courses);
-    setPageInfo(courseList.pageInfo);
-  }
+    fetchCourses();
+  }, [currentPage, queryKey, showToast, query]);
 
-  return (
+    return (
     <>
       {
         (!courses || courses?.length == 0) &&
-        <p className="text-xl mt-5 w-full text-center">
-          No Courses Found
-        </p>
+          <p className="text-xl mt-5 w-full text-center font-bold">
+            {
+              queryKey === 'courses' &&
+              "Oops! No courses found. Either there’s nothing here... or your search filters are playing hide-and-seek. 🤔🔍"
+            }
+            {
+              queryKey === 'purchasedCourses' &&
+              "Looks like you haven't bought any courses yet. Maybe it's time to invest in your future! 🚀📚"
+            }
+            {
+              queryKey === 'createdCourses' &&
+              "No courses created yet. Are you keeping all your knowledge a secret? 🤫💡"
+            }
+          </p>
       }
       {
         (courses && courses.length > 0) &&
@@ -76,6 +98,7 @@ function CourseList() {
         </div>
       }
       {
+        (courses && courses.length > 0) &&
         pageInfo &&
         <PaginationBar pageInfo={pageInfo} />
       }
