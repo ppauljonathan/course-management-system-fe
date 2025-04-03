@@ -5,9 +5,12 @@ interface FormInputProps {
   labelName: string;
   type?: string;
   required?: boolean;
-  value?: string;
+  value?: string | number;
   onChange?: (e:ChangeEvent) => void;
-  errorMessage?: string
+  errorMessage?: string;
+  min?: number;
+  max?: number;
+  step?: number;
 }
 
 function FormInput({
@@ -17,7 +20,10 @@ function FormInput({
   type = "text",
   value = '',
   onChange,
-  errorMessage
+  errorMessage,
+  min,
+  max,
+  step
 }: FormInputProps) {
   return (
     <>
@@ -26,14 +32,30 @@ function FormInput({
           <p>{labelName}</p>
           <p className="ml-1 text-red-800 text-xl dark:text-red-400">{ required ? '*' : null }</p>
         </label>
-        <input
-          type={type}
-          name={name}
-          className="border p-2 rounded w-full"
-          value={value}
-          onChange={onChange}
-          {...(required ? { required: true } : {})}
-        />
+        {
+          type === 'textarea' &&
+          <textarea
+            name={name}
+            className="border p-2 rounded w-full min-h-40"
+            value={value}
+            onChange={onChange}
+            {...(required ? { required: true } : {})}
+          ></textarea>
+        }
+        {
+          type !== 'textarea' &&
+          <input
+            type={type}
+            name={name}
+            className="border p-2 rounded w-full"
+            value={value}
+            onChange={onChange}
+            {...(required ? { required: true } : {})}
+            {...(min !== undefined ? { min: min} : {})}
+            {...(max !== undefined ? { max: max } : {})}
+            {...(step !== undefined ? { step: step} : {})}
+          />
+        }
         {
           errorMessage &&
           <span className="text-red-800 dark:text-red-400">{errorMessage}</span>

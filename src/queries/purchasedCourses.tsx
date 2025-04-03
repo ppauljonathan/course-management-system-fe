@@ -8,8 +8,8 @@ const purchasedCourses = `
         price
         created_at
         updated_at
+        live
       }
-      
       pageInfo {
         page
         per

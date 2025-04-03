@@ -11,7 +11,7 @@ function LeftNav() {
     <nav className="group/nav bg-gray-800 left-0 w-fit p-5 text-gray-50 h-dvh">
       <ul>
         <li>
-          <NavLink to="/">
+          <NavLink to="/courses-list/all">
             <div className="p-5">
               <div className="flex">
                 <img src={AppLogo} alt="Courses" className="size-6" />
@@ -25,7 +25,7 @@ function LeftNav() {
         <NavItem
           name="Home"
           icon={<HomeIcon className="size-6" />}
-          linkTo="/"
+          linkTo="/courses-list/all"
         />
         {isAuthenticated() && (
           <NavItem

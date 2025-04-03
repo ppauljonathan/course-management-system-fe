@@ -12,6 +12,7 @@ import PaginationBar from '../PaginationBar';
 import purchasedCourses from "../../queries/purchasedCourses";
 import createdCourses from "../../queries/createdCourses";
 import useToast from "../../hooks/useToast";
+import { Link } from "react-router";
 
 interface coursesResponse {
   data: {
@@ -73,6 +74,18 @@ function CourseList() {
     return (
     <>
       {
+        queryKey == 'createdCourses' &&
+        <div className="mt-5">
+          <Link
+            to="/courses/new"
+            className="p-5 rounded-2xl bg-blue-600 text-white hover:bg-blue-400 block w-fit"
+          >
+            Create a Course
+          </Link>
+        </div>
+      }
+
+      {
         (!courses || courses?.length == 0) &&
           <p className="text-xl mt-5 w-full text-center font-bold">
             {
@@ -89,14 +102,16 @@ function CourseList() {
             }
           </p>
       }
+
       {
         (courses && courses.length > 0) &&
         <div className="mt-5 flex flex-wrap">
           {
-            courses.map((course, index) => <CourseCard key={index} course={course} />)
+            courses.map((course, index) => <CourseCard key={index} course={course} showAdminData={queryKey == 'createdCourses'} />)
           }
         </div>
       }
+
       {
         (courses && courses.length > 0) &&
         pageInfo &&

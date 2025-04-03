@@ -5,6 +5,7 @@ interface CourseInterface {
   price: number;
   created_at: string;
   updated_at: string;
+  live: boolean;
 }
 
 export default CourseInterface;

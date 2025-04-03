@@ -20,7 +20,7 @@ function PaginationBar({ pageInfo }: PaginationBarProps) {
             <Link to={`${baseLink}?page=${pageInfo.page - 1}`} className="p-5">&lt;Prev</Link>
           </>
         }
-        <div className="p-5">{pageInfo.page}</div>
+        <div className="p-5">{pageInfo.page} / {pageInfo.totalPages}</div>
         {
           pageInfo.page < pageInfo.totalPages &&
           <>

@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router'
+import { Route, Routes, Navigate } from 'react-router'
 
 import LeftNav from './components/LeftNav'
 import About from './pages/About';
@@ -14,7 +14,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Logout from './pages/Logout';
 import TopBar from './components/TopBar';
 import useAuthUser from './hooks/useAuthUser';
-import ServerError from './pages/ServerError'; 
+import ServerError from './pages/ServerError';
+import CourseCreate from './pages/CourseCreate';
 
 function App() {
   const user = useAuthUser();
@@ -22,12 +23,16 @@ function App() {
   const routes = (
     <Routes>
       <Route>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Navigate to="/courses-list/all" replace />} />
+        <Route path="/courses" element={<Navigate to="/courses-list/all" replace />} />
+        <Route path="/courses-list" element={<Navigate to="/courses-list/all" replace />} />
+
         <Route path="/courses-list/all" element={<Home />} />
 
         <Route element={< ProtectedRoute/>}>
-         <Route path="/courses-list/:category" element={<Home />} />
+          <Route path="/courses-list/:category" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/courses/new" element={<CourseCreate />} />
         </Route>
         <Route element={<UnAuthRoute />}>
           <Route path="/signup" element={<Signup />} />
