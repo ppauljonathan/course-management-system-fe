@@ -8,7 +8,7 @@ function CourseCreate() {
         <Link to="/courses-list/created" className="text-blue-600 hover:text-blue-400">Courses</Link> / New
       </h1>
 
-      <CourseForm />
+      <CourseForm type="create" />
     </>
   )
 }

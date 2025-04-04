@@ -14,13 +14,31 @@ interface CourseCreateResponse {
   errors?: [ErrorInterface];
 }
 
-function CourseForm() {
-  const [formState, setFormState] = useState({
-    name: '',
-    description: '',
-    price: 0.0,
-    live: false
-  });
+interface CourseFormInterface {
+  name: string;
+  description: string;
+  price: number;
+  live: boolean;
+  id?: number;
+}
+
+interface CourseFormProps {
+  type: string;
+  course?: CourseFormInterface;
+}
+
+function CourseForm(
+  {
+    type,
+    course = {
+      name: '',
+      description: '',
+      price: 0.0,
+      live: false
+    }
+  }: CourseFormProps
+) {
+  const [formState, setFormState] = useState(course);
   const [errorMessages, setErrorMessages] = useState({
     name: '',
     description: '',
@@ -80,8 +98,17 @@ function CourseForm() {
     <>
       <div className="flex items-center justify-center h-full mt-10">
         <div className="p-5 border-2 rounded-2xl w-4xl flex items-center">
-          <div className="ml-5 w-full">
-            <h1 className="text-xl font-bold w-full text-center">Create Course</h1>
+          <div className="w-full">
+            <h1 className="text-xl font-bold w-full text-center">
+              {
+                type == 'create' &&
+                "Create Course"
+              }
+              {
+                type == 'update' &&
+                "Update Course"
+              }
+            </h1>
             <form className="mt-4 space-y-3" onSubmit={handleSubmit}>
               <FormInput
                 name="name"
@@ -92,7 +119,7 @@ function CourseForm() {
                 errorMessage={errorMessages.name}
               />
 
-             <FormInput
+              <FormInput
                 name="description"
                 labelName="Description"
                 required={true}

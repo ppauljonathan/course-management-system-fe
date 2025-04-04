@@ -25,8 +25,8 @@ function CourseCard({ course, showAdminData }: CourseCardPropsInterface) {
 
           {
             course.live ?
-              <div className="p-2 bg-green-400 rounded-2xl text-center w-2/5">Live</div>:
-              <div className="p-2 bg-gray-400 rounded-2xl text-center w-2/5">Draft</div>
+              <div className="p-2 bg-green-400 dark:bg-green-600 rounded-2xl text-center w-2/5">Live</div>:
+              <div className="p-2 bg-gray-400 dark:bg-gray-600 rounded-2xl text-center w-2/5">Draft</div>
           }
 
         </div>

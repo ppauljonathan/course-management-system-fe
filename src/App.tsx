@@ -16,6 +16,7 @@ import TopBar from './components/TopBar';
 import useAuthUser from './hooks/useAuthUser';
 import ServerError from './pages/ServerError';
 import CourseCreate from './pages/CourseCreate';
+import CourseUpdate from './pages/CourseUpdate';
 
 function App() {
   const user = useAuthUser();
@@ -33,6 +34,7 @@ function App() {
           <Route path="/courses-list/:category" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/courses/new" element={<CourseCreate />} />
+          <Route path="/courses/:id/edit" element={ <CourseUpdate /> } />
         </Route>
         <Route element={<UnAuthRoute />}>
           <Route path="/signup" element={<Signup />} />
