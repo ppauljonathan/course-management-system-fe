@@ -53,7 +53,7 @@ function Login() {
 
   function handleGraphqlResponse({ data, errors }: LoginResponse) {
     if (errors && errors.length > 0) {
-      showToast(errors.join(', '), 'error');
+      showToast(errors.map(e => e.message).join(', '), 'error');
       return;
     }
 

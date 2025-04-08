@@ -1,4 +1,5 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 import FormInput from "./FormInput";
 import FormSubmit from "./FormSubmit";
@@ -7,23 +8,21 @@ import courseCreate from "../queries/courseCreate";
 import useToast from "../hooks/useToast";
 import CourseMutationResponseInterface from "../interfaces/graphql/courses/courseMutationResponseInterface";
 import ErrorInterface from "../interfaces/graphql/common/errorInterface";
-import { useNavigate } from "react-router";
+import CourseFormInterface from "../interfaces/common/courseFormInterface";
+import courseUpdate from "../queries/courseUpdate";
 
 interface CourseCreateResponse {
   data: { courseCreate: CourseMutationResponseInterface };
   errors?: [ErrorInterface];
 }
 
-interface CourseFormInterface {
-  name: string;
-  description: string;
-  price: number;
-  live: boolean;
-  id?: number;
+interface CourseUpdateResponse {
+  data: { courseUpdate: CourseMutationResponseInterface };
+  errors?: [ErrorInterface];
 }
 
 interface CourseFormProps {
-  type: string;
+  type: 'create' | 'update';
   course?: CourseFormInterface;
 }
 
@@ -38,7 +37,12 @@ function CourseForm(
     }
   }: CourseFormProps
 ) {
-  const [formState, setFormState] = useState(course);
+  const [formState, setFormState] = useState<CourseFormInterface>({
+    name: '',
+    description: '',
+    price: 0.0,
+    live: false
+  });
   const [errorMessages, setErrorMessages] = useState({
     name: '',
     description: '',
@@ -46,6 +50,12 @@ function CourseForm(
   });
   const { showToast } = useToast();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (type === 'update' && course) {
+      setFormState(course);
+    }
+  }, [type, course]);
 
   function resetErrorMessages() {
     setErrorMessages({
@@ -55,7 +65,7 @@ function CourseForm(
     });
   }
 
-    function assignErrorMessages(errors: [ErrorInterface]) {
+  function assignErrorMessages(errors: [ErrorInterface]) {
     errors.forEach((error) => {
       setErrorMessages((prev) => ({
         ...prev,
@@ -64,9 +74,9 @@ function CourseForm(
     })
   }
 
-  function handleGraphqlResponse({ data, errors }: CourseCreateResponse) {
+  function handleCourseCreateResponse({ data, errors }: CourseCreateResponse) {
     if(errors && errors.length > 0) {
-      showToast(errors.join(', '), 'error');
+      showToast(errors.map(e => e.message).join(', '), 'error');
       return;
     }
 
@@ -81,16 +91,51 @@ function CourseForm(
     navigate('/courses-list/created');
   }
 
+  function handleCourseUpdateResponse({ data, errors }: CourseUpdateResponse) {
+    if(errors && errors.length > 0) {
+      showToast(errors.map(e => e.message).join(', '), 'error');
+      return;
+    }
+
+    const { errors: userErrors } = data.courseUpdate
+
+    if(userErrors.length > 0) {
+      assignErrorMessages(userErrors);
+      return;
+    }
+
+    showToast("Course Updated Successfully", 'success');
+    navigate('/courses-list/created');
+  }
+
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     resetErrorMessages();
-    sendGraphqlRequest(courseCreate, { course: formState }, handleGraphqlResponse, showToast);
+
+    if(type === 'create') {
+      sendGraphqlRequest<CourseCreateResponse>(
+        courseCreate,
+        { course: formState },
+        handleCourseCreateResponse,
+        showToast
+      );
+    } else {
+      sendGraphqlRequest<CourseUpdateResponse>(
+        courseUpdate,
+        { course: formState },
+        handleCourseUpdateResponse,
+        showToast
+      );
+    }
   }
 
   function updateFormState(e: ChangeEvent) {
+    const target = e.target as HTMLInputElement;
+    const { name, value, type } = target;
+
     setFormState((prev) => ({
       ...prev,
-      [(e.target as HTMLInputElement).name]: (e.target as HTMLInputElement).value,
+      [name]: type === "number" ? parseFloat(value) || 0 : value,
     }));
   }
 
@@ -106,7 +151,7 @@ function CourseForm(
               }
               {
                 type == 'update' &&
-                "Update Course"
+                "Edit Course"
               }
             </h1>
             <form className="mt-4 space-y-3" onSubmit={handleSubmit}>
@@ -140,8 +185,22 @@ function CourseForm(
                 min={0.0}
                 step={0.01}
               />
-              <div className="italic mt-10">* Note: submitting this form will create the course as a draft</div>
-              <FormSubmit name="Create" />
+
+              {
+                type == 'update' &&
+                  "Live"
+                // TODO Paul Make Live Toggle
+              }
+
+              {
+                type == 'create' &&
+                <div className="italic mt-10">* Note: submitting this form will create the course as a draft</div>
+              }
+              {
+                type == 'create' ?
+                  <FormSubmit name="Create" /> :
+                  <FormSubmit name="Update" />
+              }
             </form>
           </div>
         </div>
