@@ -2,7 +2,7 @@ import { UserCircleIcon, ArrowRightStartOnRectangleIcon } from "@heroicons/react
 import { useNavigate } from "react-router";
 
 import UserInterface from '../interfaces/graphql/users/userInterface.tsx'
-import useToast from "../hooks/useToast.tsx";
+import useToast from "../hooks/useToast";
 
 interface TopBarProps {
   user: UserInterface

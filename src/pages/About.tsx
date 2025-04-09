@@ -26,9 +26,9 @@ function About() {
       </p>
 
       <button onClick={() => showToast('Default')} className="mt-5 p-5 rounded-2xl bg-blue-800 text-white">Show Default Toast</button>
-      <button onClick={() => showToast('Success', 'success')} className="mt-5 p-5 rounded-2xl bg-green-800 text-white">Show Default Toast</button>
-      <button onClick={() => showToast('Error', 'error')} className="mt-5 p-5 rounded-2xl bg-red-800 text-white">Show Default Toast</button>
-      <button onClick={() => showToast('Warning', 'warning')} className="mt-5 p-5 rounded-2xl bg-yellow-300 text-black">Show Default Toast</button>
+      <button onClick={() => showToast('Success', 'success')} className="mt-5 p-5 rounded-2xl bg-green-800 text-white">Show Success Toast</button>
+      <button onClick={() => showToast('Error', 'error')} className="mt-5 p-5 rounded-2xl bg-red-800 text-white">Show Error Toast</button>
+      <button onClick={() => showToast('Warning', 'warning')} className="mt-5 p-5 rounded-2xl bg-yellow-300 text-black">Show Warning Toast</button>
     </>
   )
 }

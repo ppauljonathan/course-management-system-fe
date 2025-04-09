@@ -16,7 +16,7 @@ const useAuthUser = () => {
     }
 
     fetchUser();
-  }, [navigate]);
+  }, [navigate, showToast]);
 
   return user;
 };
