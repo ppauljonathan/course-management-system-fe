@@ -3,7 +3,7 @@ import { ChangeEvent } from "react";
 interface FormInputProps {
   name: string;
   labelName: string;
-  type?: string;
+  type?: 'text' | 'textarea' | 'number' | 'password';
   required?: boolean;
   value?: string | number;
   onChange?: (e:ChangeEvent) => void;

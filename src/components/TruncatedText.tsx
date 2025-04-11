@@ -20,7 +20,7 @@ function TruncatedText({str, className, maxLength = 20, ending = '...'}: Truncat
       <span>{ truncate(str, maxLength, ending) }</span>
 
       {isTruncated && (
-        <div className="absolute bottom-full left-0 z-10 hidden w-max max-w-xs rounded bg-black p-2 text-xs text-white group-hover:block">
+        <div className="absolute bottom-full left-0 z-10 hidden w-max max-w-xs rounded bg-black p-2 text-xs text-white group-hover:block text-wrap break-words opacity-85">
           {str}
         </div>
       )}

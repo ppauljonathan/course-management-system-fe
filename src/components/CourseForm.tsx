@@ -134,6 +134,8 @@ function CourseForm(
 
   function formStateCases(target: HTMLInputElement) {
     if(target.type == "number") return parseFloat(target.value) || 0.0;
+    if(target.type == "text") return target.value;
+    if(target.type == "textarea") return target.value;
     if(target.checked !== undefined) return target.checked;
 
     return target.value;
@@ -195,22 +197,15 @@ function CourseForm(
                 step={0.01}
               />
 
-              {
-                type == 'update' &&
-                <Toggle
-                  name="live"
-                  labelName="Live"
-                  required={true}
-                  value={formState.live}
-                  onChange={updateFormState}
-                  errorMessage={errorMessages.live}
-                />
-              }
+              <Toggle
+                name="live"
+                labelName="Live"
+                required={true}
+                value={formState.live}
+                onChange={updateFormState}
+                errorMessage={errorMessages.live}
+              />
 
-              {
-                type == 'create' &&
-                <div className="italic mt-10">* Note: submitting this form will create the course as a draft</div>
-              }
               {
                 type == 'create' ?
                   <FormSubmit name="Create" /> :
