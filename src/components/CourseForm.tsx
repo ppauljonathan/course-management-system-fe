@@ -10,6 +10,7 @@ import CourseMutationResponseInterface from "../interfaces/graphql/courses/cours
 import ErrorInterface from "../interfaces/graphql/common/errorInterface";
 import CourseFormInterface from "../interfaces/common/courseFormInterface";
 import courseUpdate from "../queries/courseUpdate";
+import Toggle from "./Toggle";
 
 interface CourseCreateResponse {
   data: { courseCreate: CourseMutationResponseInterface };
@@ -47,6 +48,7 @@ function CourseForm(
     name: '',
     description: '',
     price: '',
+    live: ''
   });
   const { showToast } = useToast();
   const navigate = useNavigate();
@@ -62,6 +64,7 @@ function CourseForm(
       name: '',
       description: '',
       price: '',
+      live: '',
     });
   }
 
@@ -129,13 +132,19 @@ function CourseForm(
     }
   }
 
+  function formStateCases(target: HTMLInputElement) {
+    if(target.type == "number") return parseFloat(target.value) || 0.0;
+    if(target.checked !== undefined) return target.checked;
+
+    return target.value;
+  }
+
   function updateFormState(e: ChangeEvent) {
     const target = e.target as HTMLInputElement;
-    const { name, value, type } = target;
 
     setFormState((prev) => ({
       ...prev,
-      [name]: type === "number" ? parseFloat(value) || 0 : value,
+      [target.name]: formStateCases(target),
     }));
   }
 
@@ -188,8 +197,14 @@ function CourseForm(
 
               {
                 type == 'update' &&
-                  "Live"
-                // TODO Paul Make Live Toggle
+                <Toggle
+                  name="live"
+                  labelName="Live"
+                  required={true}
+                  value={formState.live}
+                  onChange={updateFormState}
+                  errorMessage={errorMessages.live}
+                />
               }
 
               {
