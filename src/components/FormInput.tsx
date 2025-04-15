@@ -1,9 +1,10 @@
 import { ChangeEvent } from "react";
+import FormInputLabel from "./FormInputLabel";
 
 interface FormInputProps {
   name: string;
   labelName: string;
-  type?: 'text' | 'textarea' | 'number' | 'password';
+  type?: 'text' |'number' | 'password';
   required?: boolean;
   value?: string | number;
   onChange?: (e:ChangeEvent) => void;
@@ -28,34 +29,19 @@ function FormInput({
   return (
     <>
       <div>
-        <label htmlFor={name} className="flex">
-          <p>{labelName}</p>
-          <p className="ml-1 text-red-800 text-xl dark:text-red-400">{ required ? '*' : null }</p>
-        </label>
-        {
-          type === 'textarea' &&
-          <textarea
-            name={name}
-            className="border p-2 rounded w-full min-h-40"
-            value={value}
-            onChange={onChange}
-            {...(required ? { required: true } : {})}
-          ></textarea>
-        }
-        {
-          type !== 'textarea' &&
-          <input
-            type={type}
-            name={name}
-            className="border p-2 rounded w-full"
-            value={value}
-            onChange={onChange}
-            {...(required ? { required: true } : {})}
-            {...(min !== undefined ? { min: min} : {})}
-            {...(max !== undefined ? { max: max } : {})}
-            {...(step !== undefined ? { step: step} : {})}
-          />
-        }
+        <FormInputLabel name={name} labelName={labelName} required={required} />
+
+        <input
+          type={type}
+          name={name}
+          className="border p-2 rounded w-full"
+          value={value}
+          onChange={onChange}
+          {...(required ? { required: true } : {})}
+          {...(min !== undefined ? { min: min} : {})}
+          {...(max !== undefined ? { max: max } : {})}
+          {...(step !== undefined ? { step: step} : {})}
+        />
         {
           errorMessage &&
           <span className="text-red-800 dark:text-red-400">{errorMessage}</span>

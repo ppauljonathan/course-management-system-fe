@@ -11,6 +11,7 @@ import ErrorInterface from "../interfaces/graphql/common/errorInterface";
 import CourseFormInterface from "../interfaces/common/courseFormInterface";
 import courseUpdate from "../queries/courseUpdate";
 import Toggle from "./Toggle";
+import MarkdownInput from "./MarkdownInput";
 
 interface CourseCreateResponse {
   data: { courseCreate: CourseMutationResponseInterface };
@@ -175,14 +176,13 @@ function CourseForm(
                 errorMessage={errorMessages.name}
               />
 
-              <FormInput
+              <MarkdownInput
                 name="description"
                 labelName="Description"
                 required={true}
                 value={formState.description}
                 onChange={updateFormState}
                 errorMessage={errorMessages.description}
-                type="textarea"
               />
 
               <FormInput
