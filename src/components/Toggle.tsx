@@ -1,4 +1,5 @@
 import { ChangeEvent } from "react";
+import FormInputLabel from "./FormInputLabel";
 
 interface ToggleProps {
   name: string;
@@ -14,10 +15,8 @@ function Toggle({ name, labelName, required, value, onChange }: ToggleProps) {
   return (
     <>
       <div className="flex">
-        <label htmlFor={name} className="flex">
-          <p>{labelName}</p>
-          <p className="ml-1 text-red-800 text-xl dark:text-red-400">{ required ? '*' : null }</p>
-        </label>
+        <FormInputLabel name={name} labelName={labelName} required={required} />
+
         <label className="inline-flex items-center cursor-pointer ml-10">
           <input
             type="checkbox"
