@@ -17,6 +17,7 @@ import useAuthUser from './hooks/useAuthUser';
 import ServerError from './pages/ServerError';
 import CourseCreate from './pages/CourseCreate';
 import CourseUpdate from './pages/CourseUpdate';
+import MarkdownTutorial from './pages/MarkdownTutorial';
 
 function App() {
   const user = useAuthUser();
@@ -29,6 +30,8 @@ function App() {
         <Route path="/courses-list" element={<Navigate to="/courses-list/all" replace />} />
 
         <Route path="/courses-list/all" element={<Home />} />
+
+        <Route path="/md-help" element={<MarkdownTutorial />} />
 
         <Route element={< ProtectedRoute/>}>
           <Route path="/courses-list/:category" element={<Home />} />
