@@ -18,6 +18,7 @@ import ServerError from './pages/ServerError';
 import CourseCreate from './pages/CourseCreate';
 import CourseUpdate from './pages/CourseUpdate';
 import MarkdownTutorial from './pages/MarkdownTutorial';
+import CourseShow from './pages/CourseShow';
 
 function App() {
   const user = useAuthUser();
@@ -37,6 +38,7 @@ function App() {
           <Route path="/courses-list/:category" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/courses/new" element={<CourseCreate />} />
+          <Route path="/courses/:id" element={ <CourseShow /> } />
           <Route path="/courses/:id/edit" element={ <CourseUpdate /> } />
         </Route>
         <Route element={<UnAuthRoute />}>

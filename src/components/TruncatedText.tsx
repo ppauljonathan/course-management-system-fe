@@ -2,7 +2,8 @@ interface TruncatedTextProps {
   str: string;
   maxLength?: number;
   ending?: string;
-  className?: string
+  className?: string;
+  onClick?: () => void;
 }
 
 function truncate(str: string, maxLength = 20, ending = '...') {
@@ -12,11 +13,11 @@ function truncate(str: string, maxLength = 20, ending = '...') {
   return str;
 }
 
-function TruncatedText({str, className, maxLength = 20, ending = '...'}: TruncatedTextProps) {
+function TruncatedText({str, className, maxLength = 20, ending = '...', onClick}: TruncatedTextProps) {
   const isTruncated = str.length > maxLength;
 
   return (
-    <div className={`relative group ${className}`}>
+    <div className={`relative group ${className}`} onClick={onClick}>
       <span>{ truncate(str, maxLength, ending) }</span>
 
       {isTruncated && (
