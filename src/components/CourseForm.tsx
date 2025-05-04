@@ -154,7 +154,7 @@ function CourseForm(
   return (
     <>
       <div className="flex items-center justify-center h-full mt-10">
-        <div className="p-5 border-2 rounded-2xl w-4xl flex items-center">
+        <div className="p-5 border-2 rounded-2xl w-11/12 flex items-center">
           <div className="w-full">
             <h1 className="text-xl font-bold w-full text-center">
               {

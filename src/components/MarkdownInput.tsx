@@ -44,7 +44,8 @@ function MarkdownInput({ name, labelName, required, value, onChange, errorMessag
             !showPreview &&
             <textarea
               name={name}
-              className="border p-2 rounded w-full min-h-40 max-h-60 overflow-y-scroll"
+              id={name}
+              className="border p-2 rounded w-full min-h-40 max-h-60 overflow-y-auto"
               value={value}
               onChange={onChange}
               {...(required ? { required : true } : {})}
@@ -52,7 +53,7 @@ function MarkdownInput({ name, labelName, required, value, onChange, errorMessag
           }
           {
             showPreview &&
-             <div className="border p-2 rounded w-full max-w-full min-h-40 prose dark:prose-invert max-h-60 overflow-y-scroll">
+             <div className="border p-2 rounded w-full max-w-full min-h-40 prose dark:prose-invert max-h-60 overflow-y-auto">
               <ReactMarkdown>{value || "Nothing to Preview..."}</ReactMarkdown>
             </div>
           }

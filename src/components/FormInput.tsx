@@ -34,6 +34,7 @@ function FormInput({
         <input
           type={type}
           name={name}
+          id={name}
           className="border p-2 rounded w-full"
           value={value}
           onChange={onChange}

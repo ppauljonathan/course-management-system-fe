@@ -61,7 +61,7 @@ function App() {
     <>
       <div className="h-dvh w-dvw flex dark:bg-gray-900 dark:text-white">
         <LeftNav />
-        <div className='h-full w-full flex-col overflow-y-scroll'>
+        <div className='h-full w-full flex-col overflow-y-auto'>
           { user && <TopBar user={user} /> }
           <div className={`ml-5 mr-5  ${user ? 'mt-5' : 'h-dvh pt-5' }`}>
             {routes}

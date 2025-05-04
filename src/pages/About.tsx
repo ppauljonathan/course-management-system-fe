@@ -1,7 +1,9 @@
 import useToast from "../hooks/useToast"
+import useModal from "../hooks/useModal";
 
 function About() {
   const { showToast } = useToast();
+  const [Modal, setShowModal] = useModal();
   return(
     <>
       <h1 className="text-2xl font-extrabold">About Us</h1>
@@ -29,6 +31,14 @@ function About() {
       <button onClick={() => showToast('Success', 'success')} className="mt-5 p-5 rounded-2xl bg-green-800 text-white">Show Success Toast</button>
       <button onClick={() => showToast('Error', 'error')} className="mt-5 p-5 rounded-2xl bg-red-800 text-white">Show Error Toast</button>
       <button onClick={() => showToast('Warning', 'warning')} className="mt-5 p-5 rounded-2xl bg-yellow-300 text-black">Show Warning Toast</button>
+      <button onClick={() => setShowModal(true)} className="mt-5 p-5 rounded-2xl bg-black text-white">Show Modal</button>
+
+
+      <Modal title="This is a test Modal">
+        <p className="text-lg">
+          Neque fringilla cursus aptent sagittis malesuada vel. Viverra per efficitur orci ligula inceptos nascetur magnis porta pharetra. Venenatis nisl hac ultricies ac porta nisl sociosqu quis ad. Interdum malesuada orci augue habitasse habitant lectus per. Amet vitae aliquet habitasse senectus himenaeos venenatis. Tristique molestie ante morbi adipiscing montes taciti vehicula. Mollis dolor semper curabitur posuere aliquet. Nascetur orci aptent odio; ad placerat nisl sit. Turpis montes faucibus cursus metus phasellus hac ad ipsum nascetur. Vivamus aptent ullamcorper pulvinar class sapien viverra non.
+        </p>
+      </Modal>
     </>
   )
 }
