@@ -45,7 +45,7 @@ function MarkdownInput({ name, labelName, required, value, onChange, errorMessag
             <textarea
               name={name}
               id={name}
-              className="border p-2 rounded w-full min-h-40 max-h-60 overflow-y-auto"
+              className="border p-2 rounded w-full min-h-40 overflow-y-auto"
               value={value}
               onChange={onChange}
               {...(required ? { required : true } : {})}

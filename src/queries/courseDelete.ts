@@ -1,6 +1,6 @@
-const courseUpdate = `
-  mutation CourseUpdate($course: CourseUpdateInput!) {
-    courseUpdate(course: $course) {
+const courseDelete = `
+  mutation CourseDelete($id: ID!) {
+    courseDelete(id: $id) {
       course {
         id
         name
@@ -19,4 +19,4 @@ const courseUpdate = `
   }
 `
 
-export default courseUpdate;
+export default courseDelete;

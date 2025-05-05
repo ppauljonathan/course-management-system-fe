@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 
 import CourseForm from "../components/CourseForm";
 import sendGraphqlRequest from "../utils/graphqlHandler";
@@ -8,9 +8,14 @@ import useToast from "../hooks/useToast";
 import CourseInterface from "../interfaces/graphql/courses/courseInterface";
 import CourseFormInterface from "../interfaces/common/courseFormInterface";
 import useModal from '../hooks/useModal';
+import courseDelete from "../queries/courseDelete";
 
 interface FetchCourseInterface {
   data: { course: CourseInterface }
+}
+
+interface DeleteCourseInterface {
+  data: { courseDelete: CourseInterface }
 }
 
 function CourseUpdate() {
@@ -23,6 +28,7 @@ function CourseUpdate() {
     price: 0.0,
   });
   const [DeleteConfirmModal, setShowDeleteConfirmationModal] = useModal();
+  const navigate = useNavigate();
 
   useEffect(() => {
     function fetchCourse() {
@@ -39,6 +45,8 @@ function CourseUpdate() {
 
 
   function assignCourseData({ data: { course } }: FetchCourseInterface) {
+    if(!course) { return; }
+
     setCourseData({
       live: course.live,
       description: course.description,
@@ -46,6 +54,20 @@ function CourseUpdate() {
       price: course.price,
       id: course.id
     });
+  }
+
+  function deleteCourse() {
+    sendGraphqlRequest<DeleteCourseInterface>(
+      courseDelete,
+      { id: courseId },
+      handleCourseDeletion,
+      showToast
+    )
+  }
+
+  function handleCourseDeletion() {
+    navigate('/courses-list/created');
+    showToast("Course deleted successfully", 'success')
   }
 
   return (
@@ -68,7 +90,7 @@ function CourseUpdate() {
         Are you Sure?
         <div className="flex mt-5 justify-around">
           <div
-            onClick={() => alert("DELETED")}  // TODO Delete Logic
+            onClick={() => deleteCourse()}
             className="p-2 w-2/5 text-center rounded-2xl bg-green-500 hover:bg-green-600"
           >Yes</div>
           <div

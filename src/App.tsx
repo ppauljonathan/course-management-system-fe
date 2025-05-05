@@ -63,7 +63,7 @@ function App() {
         <LeftNav />
         <div className='h-full w-full flex-col overflow-y-auto'>
           { user && <TopBar user={user} /> }
-          <div className={`ml-5 mr-5  ${user ? 'mt-5' : 'h-dvh pt-5' }`}>
+          <div className={`ml-5 mr-5 mb-5 ${user ? 'mt-5' : 'h-dvh pt-5' }`}>
             {routes}
           </div>
         </div>

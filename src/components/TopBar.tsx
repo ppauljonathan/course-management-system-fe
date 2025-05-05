@@ -18,7 +18,7 @@ function TopBar({ user }: TopBarProps) {
 
   return (
     <>
-      <div className="h-12 flex bg-white dark:bg-gray-800 shadow-lg">
+      <div className="h-12 flex bg-white dark:bg-gray-800 shadow-lg w-full">
         <div className="flex ml-auto mr-2">
           <div className="self-center flex hover:bg-gray-300 p-3 cursor-pointer dark:hover:bg-gray-600">
             <UserCircleIcon className="size-8 self-center" />
