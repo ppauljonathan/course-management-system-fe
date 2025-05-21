@@ -2,9 +2,10 @@ import { ChangeEvent, useState } from "react";
 import { Link } from "react-router";
 import ReactMarkdown from "react-markdown";
 import { ArrowLongDownIcon } from "@heroicons/react/24/solid";
-import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
+import{ QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 
 import FormInputLabel from "./FormInputLabel";
+import ResizableTextArea from "./ResizableTextArea";
 
 interface MarkdownInputProps {
   name: string;
@@ -42,16 +43,13 @@ function MarkdownInput({ name, labelName, required, value, onChange, errorMessag
           </div>
           {
             !showPreview &&
-            <textarea
-              name={name}
-              id={name}
-              className="border p-2 rounded w-full min-h-40 overflow-y-auto"
-              value={value}
-              onChange={onChange}
-              {...(required ? { required : true } : {})}
-            />
-
-            // TODO Make the TextArea autoresizable
+              <ResizableTextArea
+                name={name}
+                id={name}
+                value={value}
+                onChange={onChange}
+                {...(required ? { required: true } : {})}
+              />
           }
           {
             showPreview &&
