@@ -163,7 +163,7 @@ function CourseForm(
               }
               {
                 type == 'update' &&
-                "Edit Course"
+                "Edit Course Details"
               }
             </h1>
             <form className="mt-4 space-y-3" onSubmit={handleSubmit}>

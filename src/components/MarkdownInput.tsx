@@ -50,10 +50,12 @@ function MarkdownInput({ name, labelName, required, value, onChange, errorMessag
               onChange={onChange}
               {...(required ? { required : true } : {})}
             />
+
+            // TODO Make the TextArea autoresizable
           }
           {
             showPreview &&
-             <div className="border p-2 rounded w-full max-w-full min-h-40 prose dark:prose-invert max-h-60 overflow-y-auto">
+             <div className="border p-2 rounded w-full max-w-full min-h-40 prose dark:prose-invert overflow-y-auto">
               <ReactMarkdown>{value || "Nothing to Preview..."}</ReactMarkdown>
             </div>
           }
