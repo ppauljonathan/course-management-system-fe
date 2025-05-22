@@ -34,7 +34,6 @@ function CourseForm(
     course = {
       name: '',
       description: '',
-      price: 0.0,
       live: false
     }
   }: CourseFormProps
@@ -42,13 +41,11 @@ function CourseForm(
   const [formState, setFormState] = useState<CourseFormInterface>({
     name: '',
     description: '',
-    price: 0.0,
     live: false
   });
   const [errorMessages, setErrorMessages] = useState({
     name: '',
     description: '',
-    price: '',
     live: ''
   });
   const { showToast } = useToast();
@@ -64,7 +61,6 @@ function CourseForm(
     setErrorMessages({
       name: '',
       description: '',
-      price: '',
       live: '',
     });
   }
@@ -183,18 +179,6 @@ function CourseForm(
                 value={formState.description}
                 onChange={updateFormState}
                 errorMessage={errorMessages.description}
-              />
-
-              <FormInput
-                name="price"
-                labelName="Price in USD"
-                required={true}
-                value={formState.price}
-                onChange={updateFormState}
-                errorMessage={errorMessages.price}
-                type="number"
-                min={0.0}
-                step={0.01}
               />
 
               <Toggle

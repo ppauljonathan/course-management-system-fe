@@ -21,7 +21,7 @@ function ResizableTextArea({name, id, value, onChange}: ResizableTextAreaProps) 
     <div
       ref={wrapperRef}
       data-replicated-value={value}
-      className="grid before:content-[attr(data-replicated-value)_] before:whitespace-pre-wrap before:invisible before:border before:border-black before:p-2 before:font-inherit before:[grid-area:1/1/2/2]"
+      className="grid before:content-[attr(data-replicated-value)_] before:whitespace-pre-wrap before:invisible before:border before:border-black before:p-2 before:font-inherit before:[grid-area:1/1/2/2] min-h-40"
     >
       <textarea
         name={name}

@@ -9,7 +9,6 @@ import CourseInterface from "../../interfaces/graphql/courses/courseInterface";
 import CourseCard from "./CourseCard";
 import PageInfoInterface from "../../interfaces/graphql/common/pageInfoInterface";
 import PaginationBar from '../PaginationBar';
-import purchasedCourses from "../../queries/purchasedCourses";
 import createdCourses from "../../queries/createdCourses";
 import useToast from "../../hooks/useToast";
 import { Link } from "react-router";
@@ -17,7 +16,6 @@ import { Link } from "react-router";
 interface coursesResponse {
   data: {
     courses?: PaginationResponseInterface;
-    purchasedCourses?: PaginationResponseInterface;
     createdCourses?: PaginationResponseInterface;
   }
 }
@@ -33,7 +31,6 @@ function CourseList() {
   const { showToast } = useToast();
 
   const queryKey = useMemo(() => {
-    if(pathname === '/courses-list/purchased') return 'purchasedCourses';
     if(pathname === '/courses-list/created') return 'createdCourses';
 
     return 'courses';
@@ -41,7 +38,6 @@ function CourseList() {
 
   const query = useMemo(() => {
     const queries = {
-      purchasedCourses: purchasedCourses,
       createdCourses: createdCourses,
       courses: courseQuery
     }
@@ -92,10 +88,7 @@ function CourseList() {
               queryKey === 'courses' &&
               "Oops! No courses found. Either there’s nothing here... or your search filters are playing hide-and-seek. 🤔🔍"
             }
-            {
-              queryKey === 'purchasedCourses' &&
-              "Looks like you haven't bought any courses yet. Maybe it's time to invest in your future! 🚀📚"
-            }
+
             {
               queryKey === 'createdCourses' &&
               "No courses created yet. Are you keeping all your knowledge a secret? 🤫💡"

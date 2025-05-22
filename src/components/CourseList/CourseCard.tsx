@@ -48,11 +48,6 @@ function CourseCard({ course, showAdminData }: CourseCardPropsInterface) {
           maxLength={30}
           className="text-lg font-bold"
         />
-        {
-          course.price == 0 ?
-            <div>Free</div> :
-            <div>Price: ${course.price.toFixed(2)}</div>
-        }
        </div>
 
       </div>

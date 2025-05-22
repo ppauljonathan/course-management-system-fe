@@ -25,7 +25,6 @@ function CourseUpdate() {
     live: false,
     description: '',
     name: '',
-    price: 0.0,
   });
   const [DeleteConfirmModal, setShowDeleteConfirmationModal] = useModal();
   const navigate = useNavigate();
@@ -51,7 +50,6 @@ function CourseUpdate() {
       live: course.live,
       description: course.description,
       name: course.name,
-      price: course.price,
       id: course.id
     });
   }

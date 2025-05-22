@@ -15,7 +15,6 @@ const defaultCourse: CourseWithUserInterface = {
   id: 0,
   name: '',
   description: '',
-  price: 0.0,
   created_at: '',
   updated_at: '',
   live: false,
