@@ -77,7 +77,7 @@ function CourseUpdate() {
         / {courseId} / Edit
       </h1>
       <CourseForm type="update" course={courseData} />
-      <h2 className="text-xl font-bold mt-5">Modules</h2>
+      <h2 className="text-xl font-bold mt-5">Chapters</h2>
       <h2 className="text-xl font-bold mt-5">Danger Zone</h2>
       <button
         className="text-lg font-medium mt-5 ml-5 p-5 rounded-2xl bg-red-500 hover:bg-red-600"
