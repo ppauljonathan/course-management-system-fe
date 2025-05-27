@@ -19,6 +19,7 @@ import CourseCreate from './pages/CourseCreate';
 import CourseUpdate from './pages/CourseUpdate';
 import MarkdownTutorial from './pages/MarkdownTutorial';
 import CourseShow from './pages/CourseShow';
+import ChapterCreate from './pages/ChapterCreate';
 
 function App() {
   const user = useAuthUser();
@@ -34,12 +35,13 @@ function App() {
 
         <Route path="/md-help" element={<MarkdownTutorial />} />
 
-        <Route element={< ProtectedRoute/>}>
+        <Route element={< ProtectedRoute />}>
           <Route path="/courses-list/:category" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/courses/new" element={<CourseCreate />} />
-          <Route path="/courses/:id" element={ <CourseShow /> } />
-          <Route path="/courses/:id/edit" element={ <CourseUpdate /> } />
+          <Route path="/courses/:id" element={<CourseShow />} />
+          <Route path="/courses/:id/edit" element={<CourseUpdate />} />
+          <Route path='/courses/:id/chapters/new' element={<ChapterCreate />} />
         </Route>
         <Route element={<UnAuthRoute />}>
           <Route path="/signup" element={<Signup />} />
@@ -62,8 +64,8 @@ function App() {
       <div className="h-dvh w-dvw flex dark:bg-gray-900 dark:text-white">
         <LeftNav />
         <div className='h-full w-full flex-col overflow-y-auto'>
-          { user && <TopBar user={user} /> }
-          <div className={`ml-5 mr-5 mb-5 ${user ? 'mt-5' : 'h-dvh pt-5' }`}>
+          {user && <TopBar user={user} />}
+          <div className={`ml-5 mr-5 mb-5 ${user ? 'mt-5' : 'h-dvh pt-5'}`}>
             {routes}
           </div>
         </div>
