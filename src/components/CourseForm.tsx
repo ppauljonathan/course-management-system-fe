@@ -88,7 +88,7 @@ function CourseForm(
     }
 
     showToast("Course Created Successfully", 'success');
-    navigate('/courses-list/created');
+    navigate(`/courses/${data.courseCreate.course.id}/edit`);
   }
 
   function handleCourseUpdateResponse({ data, errors }: CourseUpdateResponse) {
@@ -105,7 +105,7 @@ function CourseForm(
     }
 
     showToast("Course Updated Successfully", 'success');
-    navigate('/courses-list/created');
+    navigate(`/courses/${data.courseUpdate.course.id}/edit`);
   }
 
   function handleSubmit(e: FormEvent) {
