@@ -41,7 +41,7 @@ function App() {
           <Route path="/courses/new" element={<CourseCreate />} />
           <Route path="/courses/:id" element={<CourseShow />} />
           <Route path="/courses/:id/edit" element={<CourseUpdate />} />
-          <Route path='/courses/:id/chapters/new' element={<ChapterCreate />} />
+          <Route path='/courses/:courseId/chapters/new' element={<ChapterCreate />} />
         </Route>
         <Route element={<UnAuthRoute />}>
           <Route path="/signup" element={<Signup />} />

@@ -8,6 +8,11 @@ mutation ChapterUpdate($chapter: ChapterUpdateInpt!) {
       created_at
       updated_at
     }
+    errors {
+      code
+      message
+      location
+    }
   }
 }
 `;

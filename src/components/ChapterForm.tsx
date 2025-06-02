@@ -5,19 +5,34 @@ import FormSubmit from "./FormSubmit";
 import MarkdownInput from "./MarkdownInput";
 import useToast from "../hooks/useToast";
 import sendGraphqlRequest from "../utils/graphqlHandler";
+import chapterCreate from "../queries/chapterCreate";
+import chapterUpdate from "../queries/chapterUpdate";
+import ChapterMutationResponseInterface from "../interfaces/graphql/chapters/chapterMutationResponseInterface";
+import ErrorInterface from "../interfaces/graphql/common/errorInterface";
+import { useNavigate } from "react-router";
 
 interface ChapterFormInterface {
   title: string;
   content: string;
 }
 
+interface ChapterCreateResponse {
+  data: { chapterCreate: ChapterMutationResponseInterface; };
+  errors: [ErrorInterface];
+}
+
+interface ChapterUpdateResponse {
+  data: { chapterUpdate: ChapterMutationResponseInterface; };
+  errors: [ErrorInterface];
+}
 
 interface ChapterFormProps {
   type: 'create' | 'update';
   chapter?: ChapterFormInterface;
+  courseId?: string;
 }
 
-function ChapterForm({ type, chapter = { title: '', content: '' } }: ChapterFormProps) {
+function ChapterForm({ type, chapter = { title: '', content: '' }, courseId }: ChapterFormProps) {
   const [formState, setFormState] = useState<ChapterFormInterface>({
     title: '',
     content: ''
@@ -27,6 +42,7 @@ function ChapterForm({ type, chapter = { title: '', content: '' } }: ChapterForm
     content: ''
   })
   const { showToast } = useToast();
+  const navigate = useNavigate();
 
   function resetErrorMessages() {
     setErrorMessages({
@@ -35,24 +51,63 @@ function ChapterForm({ type, chapter = { title: '', content: '' } }: ChapterForm
     })
   }
 
-  function handleChapterCreateResponse() {}
+  function assignErrorMessages(errors: [ErrorInterface]) {
+    errors.forEach((error) => {
+      setErrorMessages((prev) => ({
+        ...prev,
+        [error.location]: error.message
+      }))
+    });
+  }
 
-  function handleChapterUpdateResponse() {}
+  function handleChapterCreateResponse({data, errors}: ChapterCreateResponse) {
+    if(errors && errors.length > 0) {
+      showToast(errors.map(e => e.message).join(', '), 'error');
+      return;
+    }
+
+    const { errors: userErrors } = data.chapterCreate;
+
+    if(userErrors.length > 0) {
+      assignErrorMessages(userErrors);
+      return;
+    }
+
+    showToast("Chapter Created Successfully", "success");
+    navigate(`/courses/${courseId}/chapters/${data.chapterCreate.chapter.id}/edit`);
+  }
+
+  function handleChapterUpdateResponse({ data, errors }: ChapterUpdateResponse) {
+    if(errors && errors.length > 0) {
+      showToast(errors.map(e => e.message).join(', '), 'error');
+      return;
+    }
+
+    const { errors: userErrors } = data.chapterUpdate
+
+    if(userErrors.length > 0) {
+      assignErrorMessages(userErrors);
+      return;
+
+    }
+    showToast("Chapter Updated Successfully", "success");
+    navigate(`/courses/${courseId}/chapters/${data.chapterUpdate.chapter.id}/edit`);
+  }
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     resetErrorMessages();
 
     if(type == 'create') {
-      sendGraphqlRequest(
-        '',
+      sendGraphqlRequest<ChapterCreateResponse>(
+        chapterCreate,
         {},
         handleChapterCreateResponse,
         showToast
       )
     } else {
-      sendGraphqlRequest(
-        '',
+      sendGraphqlRequest<ChapterUpdateResponse>(
+        chapterUpdate,
         {},
         handleChapterUpdateResponse,
         showToast
