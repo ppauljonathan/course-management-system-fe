@@ -1,4 +1,5 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 import FormInput from "./FormInput";
 import FormSubmit from "./FormSubmit";
@@ -9,12 +10,7 @@ import chapterCreate from "../queries/chapterCreate";
 import chapterUpdate from "../queries/chapterUpdate";
 import ChapterMutationResponseInterface from "../interfaces/graphql/chapters/chapterMutationResponseInterface";
 import ErrorInterface from "../interfaces/graphql/common/errorInterface";
-import { useNavigate } from "react-router";
-
-interface ChapterFormInterface {
-  title: string;
-  content: string;
-}
+import ChapterFormInterface from "../interfaces/common/chapterFormInterface";
 
 interface ChapterCreateResponse {
   data: { chapterCreate: ChapterMutationResponseInterface; };
@@ -32,7 +28,7 @@ interface ChapterFormProps {
   courseId?: string;
 }
 
-function ChapterForm({ type, chapter = { title: '', content: '' }, courseId }: ChapterFormProps) {
+function ChapterForm({ type, chapter, courseId }: ChapterFormProps) {
   const [formState, setFormState] = useState<ChapterFormInterface>({
     title: '',
     content: ''
@@ -43,6 +39,12 @@ function ChapterForm({ type, chapter = { title: '', content: '' }, courseId }: C
   })
   const { showToast } = useToast();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (type == 'update' && chapter) {
+      setFormState(chapter)
+    }
+  }, [type, chapter])
 
   function resetErrorMessages() {
     setErrorMessages({
@@ -101,14 +103,14 @@ function ChapterForm({ type, chapter = { title: '', content: '' }, courseId }: C
     if(type == 'create') {
       sendGraphqlRequest<ChapterCreateResponse>(
         chapterCreate,
-        {},
+        { chapter: { ...formState, courseId: courseId } },
         handleChapterCreateResponse,
         showToast
       )
     } else {
       sendGraphqlRequest<ChapterUpdateResponse>(
         chapterUpdate,
-        {},
+        { chapter: { ...formState, courseId: courseId } },
         handleChapterUpdateResponse,
         showToast
       )

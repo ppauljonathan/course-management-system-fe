@@ -2,7 +2,7 @@ import { Link, useParams } from "react-router";
 import ChapterForm from "../components/ChapterForm";
 
 function ChapterCreate() {
-  const { courseId } = useParams()
+  const { courseId } = useParams();
   return (
     <>
       <h1 className="text-3xl font-extrabold">

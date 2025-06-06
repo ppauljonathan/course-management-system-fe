@@ -1,5 +1,5 @@
 const chapterUpdate = `
-mutation ChapterUpdate($chapter: ChapterUpdateInpt!) {
+mutation ChapterUpdate($chapter: ChapterUpdateInput!) {
   chapterUpdate(chapter: $chapter) {
     chapter {
       id

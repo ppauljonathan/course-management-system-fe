@@ -20,6 +20,7 @@ import CourseUpdate from './pages/CourseUpdate';
 import MarkdownTutorial from './pages/MarkdownTutorial';
 import CourseShow from './pages/CourseShow';
 import ChapterCreate from './pages/ChapterCreate';
+import ChapterUpdate from './pages/ChapterUpdate';
 
 function App() {
   const user = useAuthUser();
@@ -42,6 +43,7 @@ function App() {
           <Route path="/courses/:id" element={<CourseShow />} />
           <Route path="/courses/:id/edit" element={<CourseUpdate />} />
           <Route path='/courses/:courseId/chapters/new' element={<ChapterCreate />} />
+          <Route path='/courses/:courseId/chapters/:id/edit' element={<ChapterUpdate />} />
         </Route>
         <Route element={<UnAuthRoute />}>
           <Route path="/signup" element={<Signup />} />

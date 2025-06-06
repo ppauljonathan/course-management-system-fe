@@ -1,5 +1,5 @@
 const chapterCreate = `
-mutation ChapterCreate($chapter: ChapterCreateInpt!) {
+mutation ChapterCreate($chapter: ChapterCreateInput!) {
   chapterCreate(chapter: $chapter) {
     chapter {
       id

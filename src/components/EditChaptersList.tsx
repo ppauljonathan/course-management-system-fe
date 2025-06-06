@@ -1,13 +1,46 @@
 import { Link } from "react-router";
+import { useEffect, useState } from "react";
 
 import MovableChapterCard from "./MovableChapterCard";
-
+import sendGraphqlRequest from "../utils/graphqlHandler";
+import chapters from "../queries/chapters";
+import useToast from "../hooks/useToast";
+import PaginationResponseInterface from "../interfaces/graphql/common/paginationResponseInterface";
+import ChapterInterface from "../interfaces/graphql/chapters/chapterInterface";
 
 interface EditChaptersListProps {
-  courseId: string;
+  courseId?: string;
+}
+
+interface ChaptersResponse {
+  data: { chapters: PaginationResponseInterface }
 }
 
 function EditChaptersList({ courseId }: EditChaptersListProps) {
+  const [chaptersData, setChaptersData] = useState<[ChapterInterface]>()
+  const { showToast } = useToast();
+
+  useEffect(() => {
+    function fetchChapters() {
+      sendGraphqlRequest<ChaptersResponse>(
+        chapters,
+        {
+          courseId: courseId,
+          page: 1,
+          per: 5
+        },
+        assignChapters,
+        showToast
+      )
+    }
+
+    fetchChapters();
+  }, [courseId, showToast])
+
+  function assignChapters({ data: { chapters: { chapters, pageInfo }} }: ChaptersResponse) {
+    setChaptersData(chapters);
+  }
+
   return (
     <>
       <h2 className="text-xl font-bold mt-5">Chapters</h2>
@@ -19,13 +52,11 @@ function EditChaptersList({ courseId }: EditChaptersListProps) {
           Add a Chapter
         </Link>
       </div>
-
-      <MovableChapterCard></MovableChapterCard>
-      <MovableChapterCard></MovableChapterCard>
-      <MovableChapterCard></MovableChapterCard>
-      <MovableChapterCard></MovableChapterCard>
-      <MovableChapterCard></MovableChapterCard>
-
+      {
+        chaptersData?.map((chapter) => (
+          <MovableChapterCard key={chapter.id} chapter={chapter} courseId={courseId} />
+        ))
+      }
     </>
   );
 };
