@@ -21,6 +21,7 @@ import MarkdownTutorial from './pages/MarkdownTutorial';
 import CourseShow from './pages/CourseShow';
 import ChapterCreate from './pages/ChapterCreate';
 import ChapterUpdate from './pages/ChapterUpdate';
+import ChapterShow from './pages/ChapterShow';
 
 function App() {
   const user = useAuthUser();
@@ -33,6 +34,8 @@ function App() {
         <Route path="/courses-list" element={<Navigate to="/courses-list/all" replace />} />
 
         <Route path="/courses-list/all" element={<Home />} />
+        <Route path="/courses/:id" element={<CourseShow />} />
+        <Route path='/courses/:courseId/chapters/:id' element={<ChapterShow />} />
 
         <Route path="/md-help" element={<MarkdownTutorial />} />
 
@@ -40,7 +43,6 @@ function App() {
           <Route path="/courses-list/:category" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/courses/new" element={<CourseCreate />} />
-          <Route path="/courses/:id" element={<CourseShow />} />
           <Route path="/courses/:id/edit" element={<CourseUpdate />} />
           <Route path='/courses/:courseId/chapters/new' element={<ChapterCreate />} />
           <Route path='/courses/:courseId/chapters/:id/edit' element={<ChapterUpdate />} />

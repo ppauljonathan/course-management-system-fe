@@ -19,7 +19,7 @@ function MovableChapterCard({ chapter, courseId }: MovableChapterCardProps) {
 
   return (
     <>
-      <div className="w-full p-5 rounded-2xl border mt-5 font-bold flex">
+      <div className="w-full p-5 rounded-2xl border mt-5 font-bold flex hover:bg-gray-300 dark:hover:bg-gray-800">
         <p>{ chapter.title }</p>
         <div className="flex ml-auto">
           <Link to={`/courses/${courseId}/chapters/${chapter.id}/edit`}>
