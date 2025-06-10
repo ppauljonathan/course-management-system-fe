@@ -117,10 +117,16 @@ function CourseShow() {
       </div>
 
       {
-        showChapters && (
-          chaptersData?.map((chapter) => (
-            <ChapterCard chapter={chapter} courseId={courseId} key={chapter.id} />
-          ))
+        chaptersData && (
+          showChapters ? (
+            chaptersData.length > 0 ? (
+              chaptersData.map((chapter) => (
+                <ChapterCard chapter={chapter} courseId={courseId} key={chapter.id} />
+              ))
+            ) : (
+              <div className="text-xl font-bold mt-5">No Chapters Yet</div>
+            )
+          ) : null
         )
       }
     </>

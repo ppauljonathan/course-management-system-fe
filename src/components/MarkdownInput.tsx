@@ -57,12 +57,12 @@ function MarkdownInput({ name, labelName, required, value, onChange, errorMessag
               <ReactMarkdown>{value || "Nothing to Preview..."}</ReactMarkdown>
             </div>
           }
-          <div className="group">
+          <div className="group w-fit">
             <div className="w-fit p-0.5 border-2 rounded-sm font-bold flex justify-center mt-2">
               <p className="text-sm">M</p>
               <ArrowLongDownIcon className="size-4" />
             </div>
-            <p className="absolute text-white bg-black p-2 rounded hidden group-hover:block">Markdown Input</p>
+            <p className="text-white bg-black p-2 rounded hidden group-hover:block w-fit">Markdown Input</p>
           </div>
         </div>
         {

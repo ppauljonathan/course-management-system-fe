@@ -52,7 +52,7 @@ function ChapterUpdate() {
         <Link to={`/courses/${courseId}/chapters/${chapterId}/edit`} className="text-blue-600 hover:text-blue-400">{chapterId}</Link> / Edit
       </h1>
 
-      <ChapterForm type="update" chapter={chapterData} />
+      <ChapterForm type="update" chapter={chapterData} courseId={courseId} />
     </>
   )
 }
