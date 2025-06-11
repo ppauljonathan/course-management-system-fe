@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router"
+import { Link, useNavigate, useParams } from "react-router"
 import { useEffect, useState } from "react";
 
 import ChapterForm from "../components/ChapterForm";
@@ -7,18 +7,32 @@ import chapter from "../queries/chapter";
 import useToast from "../hooks/useToast";
 import ChapterFormInterface from "../interfaces/common/chapterFormInterface";
 import ChapterInterface from "../interfaces/graphql/chapters/chapterInterface";
+import useModal from "../hooks/useModal";
+import chapterDelete from "../queries/chapterDelete";
+import ErrorInterface from "../interfaces/graphql/common/errorInterface";
+import ChapterMutationResponseInterface from "../interfaces/graphql/chapters/chapterMutationResponseInterface";
 
 interface FetchChapterInterface {
   data: { chapter: ChapterInterface }
 }
 
+interface DeleteChapterInterface {
+  data: {
+    chapterDelete: ChapterMutationResponseInterface;
+    errors: [ErrorInterface];
+  }
+  errors: [ErrorInterface];
+}
+
 function ChapterUpdate() {
   const { courseId, id: chapterId } = useParams();
+  const navigate = useNavigate();
   const { showToast } = useToast();
   const [chapterData, setChapterData] = useState<ChapterFormInterface>({
     title: '',
     content: ''
-  })
+  });
+  const [DeleteConfirmModal, setShowDeleteConfirmationModal] = useModal();
 
   useEffect(() => {
     function fetchChapter() {
@@ -43,6 +57,30 @@ function ChapterUpdate() {
     })
   }
 
+  function handleDeleteResponse({ data: { chapterDelete: { chapter, errors: userErrors } }, errors }: DeleteChapterInterface) {
+    if(errors && errors.length > 0) {
+      showToast(errors.map(e => e.message).join(', '), 'error');
+      return;
+    }
+
+    if(userErrors.length > 0) {
+      showToast(userErrors.map(e => e.message).join(', '), 'error');
+      return;
+    }
+
+    navigate(`/courses/${courseId}/edit`);
+    showToast(`Chapter ${chapter.title} deleted successfully`, 'success')
+  }
+
+  function deleteChapter() {
+    sendGraphqlRequest<DeleteChapterInterface>(
+      chapterDelete,
+      { id: chapterId },
+      handleDeleteResponse,
+      showToast
+    )
+  }
+
   return (
     <>
      <h1 className="text-3xl font-extrabold">
@@ -53,6 +91,25 @@ function ChapterUpdate() {
       </h1>
 
       <ChapterForm type="update" chapter={chapterData} courseId={courseId} />
+      <h2 className="text-xl font-bold mt-5">Danger Zone</h2>
+      <button
+        className="text-lg font-medium mt-5 ml-5 p-5 rounded-2xl bg-red-500 hover:bg-red-600"
+        onClick={() => setShowDeleteConfirmationModal(true)}
+      >Delete Chapter</button>
+
+      <DeleteConfirmModal title="Delete Chapter">
+        Are you Sure?
+        <div className="flex mt-5 justify-around">
+          <div
+            onClick={() => deleteChapter()}
+            className="p-2 w-2/5 text-center rounded-2xl bg-green-500 hover:bg-green-600"
+          >Yes</div>
+          <div
+            onClick={() => setShowDeleteConfirmationModal(false)}
+            className="p-2 w-2/5 text-center rounded-2xl bg-red-500 hover:bg-red-600"
+          >No</div>
+        </div>
+      </DeleteConfirmModal>
     </>
   )
 }

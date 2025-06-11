@@ -10,13 +10,16 @@ import CourseFormInterface from "../interfaces/common/courseFormInterface";
 import useModal from '../hooks/useModal';
 import courseDelete from "../queries/courseDelete";
 import EditChaptersList from "../components/EditChaptersList";
+import CourseMutationResponseInterface from "../interfaces/graphql/courses/courseMutationResponseInterface";
+import ErrorInterface from "../interfaces/graphql/common/errorInterface";
 
 interface FetchCourseInterface {
   data: { course: CourseInterface }
 }
 
 interface DeleteCourseInterface {
-  data: { courseDelete: CourseInterface }
+  data: { courseDelete: CourseMutationResponseInterface }
+  errors?: [ErrorInterface]
 }
 
 function CourseUpdate() {
@@ -64,9 +67,19 @@ function CourseUpdate() {
     )
   }
 
-  function handleCourseDeletion() {
+  function handleCourseDeletion({ data: { courseDelete: { course, errors: userErrors } }, errors }:DeleteCourseInterface) {
+    if(errors && errors.length > 0) {
+      showToast(errors.map(e => e.message).join(', '), 'error');
+      return;
+    }
+
+    if(userErrors.length > 0) {
+      showToast(userErrors.map(e => e.message).join(', '), 'error');
+      return;
+    }
+
     navigate('/courses-list/created');
-    showToast("Course deleted successfully", 'success')
+    showToast(`Course ${course.name} deleted successfully`, 'success')
   }
 
   return (

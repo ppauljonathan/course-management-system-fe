@@ -1,20 +1,54 @@
 import { Bars2Icon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid"
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 
 import ChapterInterface from "../interfaces/graphql/chapters/chapterInterface";
 import useModal from "../hooks/useModal";
+import sendGraphqlRequest from "../utils/graphqlHandler";
+import chapterDelete from "../queries/chapterDelete";
+import useToast from "../hooks/useToast";
+import ErrorInterface from "../interfaces/graphql/common/errorInterface";
+import ChapterMutationResponseInterface from "../interfaces/graphql/chapters/chapterMutationResponseInterface";
 
 interface MovableChapterCardProps {
   chapter: ChapterInterface;
   courseId?: string
 }
 
+interface DeleteChapterInterface {
+  data: {
+    chapterDelete: ChapterMutationResponseInterface;
+    errors: [ErrorInterface];
+  }
+  errors: [ErrorInterface];
+}
 
 function MovableChapterCard({ chapter, courseId }: MovableChapterCardProps) {
-  const [DeleteConfirmModal, setShowDeleteConfirmModal] = useModal()
+  const [DeleteConfirmModal, setShowDeleteConfirmModal] = useModal();
+  const { showToast } = useToast();
+  const navigate = useNavigate();
+
+  function handleDeleteResponse({ data: { chapterDelete: { chapter, errors: userErrors } }, errors }: DeleteChapterInterface) {
+    if(errors && errors.length > 0) {
+      showToast(errors.map(e => e.message).join(', '), 'error');
+      return;
+    }
+
+    if(userErrors.length > 0) {
+      showToast(userErrors.map(e => e.message).join(', '), 'error');
+      return;
+    }
+
+    navigate(`/courses/${courseId}/edit`);
+    showToast(`Chapter ${chapter.title} deleted successfully`, 'success')
+  }
 
   function deleteChapter() {
-
+    sendGraphqlRequest<DeleteChapterInterface>(
+    chapterDelete,
+    { id: chapter.id },
+    handleDeleteResponse,
+    showToast
+)
   }
 
   return (

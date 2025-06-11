@@ -5,6 +5,8 @@ const chapters = `
         id
         title
         content
+        created_at
+        updated_at
       }
 
       pageInfo {
