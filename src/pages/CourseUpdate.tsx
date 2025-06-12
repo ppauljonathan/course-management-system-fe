@@ -3,18 +3,20 @@ import { Link, useNavigate, useParams } from "react-router";
 
 import CourseForm from "../components/CourseForm";
 import sendGraphqlRequest from "../utils/graphqlHandler";
-import course from "../queries/course";
 import useToast from "../hooks/useToast";
-import CourseInterface from "../interfaces/graphql/courses/courseInterface";
 import CourseFormInterface from "../interfaces/common/courseFormInterface";
 import useModal from '../hooks/useModal';
 import courseDelete from "../queries/courseDelete";
 import EditChaptersList from "../components/EditChaptersList";
 import CourseMutationResponseInterface from "../interfaces/graphql/courses/courseMutationResponseInterface";
 import ErrorInterface from "../interfaces/graphql/common/errorInterface";
+import courseWithUser from "../queries/courseWithUser";
+import CourseWithUserInterface from "../interfaces/graphql/courses/courseWithUserInterface";
+import UserInterface from "../interfaces/graphql/users/userInterface";
+import getCurrentUser from "../utils/getCurrentUser";
 
 interface FetchCourseInterface {
-  data: { course: CourseInterface }
+  data: { course: CourseWithUserInterface }
 }
 
 interface DeleteCourseInterface {
@@ -36,7 +38,7 @@ function CourseUpdate() {
   useEffect(() => {
     function fetchCourse() {
       sendGraphqlRequest<FetchCourseInterface>(
-        course,
+        courseWithUser,
         { id: courseId },
         assignCourseData,
         showToast
@@ -44,11 +46,23 @@ function CourseUpdate() {
     }
 
     fetchCourse();
-  }, [courseId, showToast]);
+  }, [courseId, showToast, assignCourseData]);
 
+  async function currentUserIsOwner(owner: UserInterface):Promise<boolean> {
+    const currentUser = await getCurrentUser(showToast);
 
-  function assignCourseData({ data: { course } }: FetchCourseInterface) {
+    if(currentUser?.id == owner.id) { return true; }
+
+    return false;
+  }
+
+  async function assignCourseData({ data: { course } }: FetchCourseInterface) {
     if (!course) { return; }
+    if (!(await currentUserIsOwner(course.user))) {
+      showToast('You are not authorized to edit this course', 'error');
+      navigate('/courses-list/created');
+      return;
+    }
 
     setCourseData({
       live: course.live,
@@ -68,6 +82,8 @@ function CourseUpdate() {
   }
 
   function handleCourseDeletion({ data: { courseDelete: { course, errors: userErrors } }, errors }:DeleteCourseInterface) {
+    setShowDeleteConfirmationModal(false)
+
     if(errors && errors.length > 0) {
       showToast(errors.map(e => e.message).join(', '), 'error');
       return;

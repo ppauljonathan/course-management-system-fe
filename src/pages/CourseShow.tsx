@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { useEffect, useState, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid'
@@ -43,11 +43,16 @@ function CourseShow() {
   const [course, setCourse] = useState(defaultCourse);
   const [showAbout, setShowAbout] = useState(false);
   const [showChapters, setShowChapters] = useState(true);
-  const [chaptersData, setChaptersData] = useState<[ChapterInterface]>()
+  const [chaptersData, setChaptersData] = useState<[ChapterInterface]>();
+  const navigate = useNavigate();
 
   const assignCourseData = useCallback(({ data: { course: fetchedCourse } }: FetchCourseInterface) => {
+    if (!fetchedCourse.live) {
+      navigate('/courses-list/all');
+      showToast('Course Does not Exist', 'error');
+    }
     setCourse(fetchedCourse);
-  }, []);
+  }, [navigate, showToast]);
 
   const assignChaptersData = useCallback(({ data: { chapters: chaptersData } }: FetchChaptersInterface) => {
     setChaptersData(chaptersData.chapters)

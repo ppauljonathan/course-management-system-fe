@@ -1,6 +1,6 @@
 const chapterDelete = `
-  mutation ChapterDelete($id: ID!) {
-    chapterDelete(id: $id) {
+  mutation ChapterDelete($id: ID!, $courseId: ID!) {
+    chapterDelete(id: $id, courseId: $courseId) {
       chapter {
         id
         title

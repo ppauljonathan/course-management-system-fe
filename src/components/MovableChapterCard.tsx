@@ -28,12 +28,13 @@ function MovableChapterCard({ chapter, courseId }: MovableChapterCardProps) {
   const navigate = useNavigate();
 
   function handleDeleteResponse({ data: { chapterDelete: { chapter, errors: userErrors } }, errors }: DeleteChapterInterface) {
-    if(errors && errors.length > 0) {
+    setShowDeleteConfirmModal(false);
+    if (errors && errors.length > 0) {
       showToast(errors.map(e => e.message).join(', '), 'error');
       return;
     }
 
-    if(userErrors.length > 0) {
+    if (userErrors.length > 0) {
       showToast(userErrors.map(e => e.message).join(', '), 'error');
       return;
     }
@@ -44,17 +45,17 @@ function MovableChapterCard({ chapter, courseId }: MovableChapterCardProps) {
 
   function deleteChapter() {
     sendGraphqlRequest<DeleteChapterInterface>(
-    chapterDelete,
-    { id: chapter.id },
-    handleDeleteResponse,
-    showToast
-)
+      chapterDelete,
+      { id: chapter.id, courseId: courseId },
+      handleDeleteResponse,
+      showToast
+    )
   }
 
   return (
     <>
       <div className="w-full p-5 rounded-2xl border mt-5 font-bold flex">
-        <p>{ chapter.title }</p>
+        <p>{chapter.title}</p>
         <div className="flex ml-auto">
           <Link to={`/courses/${courseId}/chapters/${chapter.id}/edit`}>
             <PencilSquareIcon className="size-6 ml-2" />

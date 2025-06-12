@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 
 import ChapterForm from "../components/ChapterForm";
 import sendGraphqlRequest from "../utils/graphqlHandler";
-import chapter from "../queries/chapter";
 import useToast from "../hooks/useToast";
 import ChapterFormInterface from "../interfaces/common/chapterFormInterface";
 import ChapterInterface from "../interfaces/graphql/chapters/chapterInterface";
@@ -11,6 +10,9 @@ import useModal from "../hooks/useModal";
 import chapterDelete from "../queries/chapterDelete";
 import ErrorInterface from "../interfaces/graphql/common/errorInterface";
 import ChapterMutationResponseInterface from "../interfaces/graphql/chapters/chapterMutationResponseInterface";
+import UserInterface from "../interfaces/graphql/users/userInterface";
+import getCurrentUser from "../utils/getCurrentUser";
+import chapterWithCourse from "../queries/chapterWithCourse";
 
 interface FetchChapterInterface {
   data: { chapter: ChapterInterface }
@@ -37,7 +39,7 @@ function ChapterUpdate() {
   useEffect(() => {
     function fetchChapter() {
       sendGraphqlRequest<FetchChapterInterface>(
-        chapter,
+        chapterWithCourse,
         { id: chapterId },
         assignChapterData,
         showToast
@@ -47,8 +49,23 @@ function ChapterUpdate() {
     fetchChapter();
   }, [chapterId, showToast]);
 
-  function assignChapterData({ data: { chapter } }: FetchChapterInterface) {
+  async function currentUserIsOwner(owner?: UserInterface):Promise<boolean> {
+    if(owner === undefined) { return false; }
+
+    console.log(owner)
+    const currentUser = await getCurrentUser(showToast);
+    if(currentUser?.id == owner.id) { return true; }
+
+    return false;
+  }
+
+  async function assignChapterData({ data: { chapter } }: FetchChapterInterface) {
     if (!chapter) { return; }
+    if (!(await currentUserIsOwner(chapter.course?.user))) {
+      showToast('You are not authorized to edit this chapter', 'error');
+      navigate('/courses-list/created');
+      return;
+    }
 
     setChapterData({
       id: chapter.id,
@@ -58,6 +75,8 @@ function ChapterUpdate() {
   }
 
   function handleDeleteResponse({ data: { chapterDelete: { chapter, errors: userErrors } }, errors }: DeleteChapterInterface) {
+    setShowDeleteConfirmationModal(false)
+
     if(errors && errors.length > 0) {
       showToast(errors.map(e => e.message).join(', '), 'error');
       return;
@@ -75,7 +94,7 @@ function ChapterUpdate() {
   function deleteChapter() {
     sendGraphqlRequest<DeleteChapterInterface>(
       chapterDelete,
-      { id: chapterId },
+      { id: chapterId, courseId: courseId },
       handleDeleteResponse,
       showToast
     )
