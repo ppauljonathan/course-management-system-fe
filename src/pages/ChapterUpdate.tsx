@@ -35,8 +35,40 @@ function ChapterUpdate() {
     content: ''
   });
   const [DeleteConfirmModal, setShowDeleteConfirmationModal] = useModal();
+  const [isDeleted, setIsDeleted] = useState(false);
 
   useEffect(() => {
+    if(isDeleted) { return; }
+
+    async function assignChapterData({ data: { chapter } }: FetchChapterInterface) {
+      if (!chapter) {
+        showToast('Chapter not found', 'error');
+        navigate('/courses-list/created');
+        return;
+      }
+      if (!(await currentUserIsOwner(chapter.course?.user))) {
+        showToast('You are not authorized to edit this chapter', 'error');
+        navigate('/courses-list/created');
+        return;
+      }
+
+      setChapterData({
+        id: chapter.id,
+        title: chapter.title,
+        content: chapter.content
+      })
+    }
+
+    async function currentUserIsOwner(owner?: UserInterface):Promise<boolean> {
+      if(owner === undefined) { return false; }
+
+      console.log(owner)
+      const currentUser = await getCurrentUser(showToast);
+      if(currentUser?.id == owner.id) { return true; }
+
+      return false;
+    }
+
     function fetchChapter() {
       sendGraphqlRequest<FetchChapterInterface>(
         chapterWithCourse,
@@ -47,32 +79,7 @@ function ChapterUpdate() {
     }
 
     fetchChapter();
-  }, [chapterId, showToast]);
-
-  async function currentUserIsOwner(owner?: UserInterface):Promise<boolean> {
-    if(owner === undefined) { return false; }
-
-    console.log(owner)
-    const currentUser = await getCurrentUser(showToast);
-    if(currentUser?.id == owner.id) { return true; }
-
-    return false;
-  }
-
-  async function assignChapterData({ data: { chapter } }: FetchChapterInterface) {
-    if (!chapter) { return; }
-    if (!(await currentUserIsOwner(chapter.course?.user))) {
-      showToast('You are not authorized to edit this chapter', 'error');
-      navigate('/courses-list/created');
-      return;
-    }
-
-    setChapterData({
-      id: chapter.id,
-      title: chapter.title,
-      content: chapter.content
-    })
-  }
+  }, [chapterId, showToast,  navigate, isDeleted]);
 
   function handleDeleteResponse({ data: { chapterDelete: { chapter, errors: userErrors } }, errors }: DeleteChapterInterface) {
     setShowDeleteConfirmationModal(false)
@@ -87,6 +94,7 @@ function ChapterUpdate() {
       return;
     }
 
+    setIsDeleted(true);
     navigate(`/courses/${courseId}/edit`);
     showToast(`Chapter ${chapter.title} deleted successfully`, 'success')
   }
