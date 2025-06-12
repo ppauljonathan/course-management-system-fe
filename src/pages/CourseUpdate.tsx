@@ -34,8 +34,39 @@ function CourseUpdate() {
   });
   const [DeleteConfirmModal, setShowDeleteConfirmationModal] = useModal();
   const navigate = useNavigate();
+  const [isDeleted, setIsDeleted] = useState(false);
 
   useEffect(() => {
+    if(isDeleted) { return; }
+
+    async function currentUserIsOwner(owner: UserInterface):Promise<boolean> {
+      const currentUser = await getCurrentUser(showToast);
+
+      if(currentUser?.id == owner.id) { return true; }
+
+      return false;
+    }
+
+    async function assignCourseData({ data: { course } }: FetchCourseInterface) {
+      if (!course) {
+        showToast('Course not found', 'error');
+        navigate('/courses-list/created');
+        return;
+      }
+      if (!(await currentUserIsOwner(course.user))) {
+        showToast('You are not authorized to edit this course', 'error');
+        navigate('/courses-list/created');
+        return;
+      }
+
+      setCourseData({
+        live: course.live,
+        description: course.description,
+        name: course.name,
+        id: course.id
+      });
+    }
+
     function fetchCourse() {
       sendGraphqlRequest<FetchCourseInterface>(
         courseWithUser,
@@ -46,31 +77,7 @@ function CourseUpdate() {
     }
 
     fetchCourse();
-  }, [courseId, showToast, assignCourseData]);
-
-  async function currentUserIsOwner(owner: UserInterface):Promise<boolean> {
-    const currentUser = await getCurrentUser(showToast);
-
-    if(currentUser?.id == owner.id) { return true; }
-
-    return false;
-  }
-
-  async function assignCourseData({ data: { course } }: FetchCourseInterface) {
-    if (!course) { return; }
-    if (!(await currentUserIsOwner(course.user))) {
-      showToast('You are not authorized to edit this course', 'error');
-      navigate('/courses-list/created');
-      return;
-    }
-
-    setCourseData({
-      live: course.live,
-      description: course.description,
-      name: course.name,
-      id: course.id
-    });
-  }
+  }, [courseId, showToast, navigate, isDeleted]);
 
   function deleteCourse() {
     sendGraphqlRequest<DeleteCourseInterface>(
@@ -94,6 +101,7 @@ function CourseUpdate() {
       return;
     }
 
+    setIsDeleted(true);
     navigate('/courses-list/created');
     showToast(`Course ${course.name} deleted successfully`, 'success')
   }
