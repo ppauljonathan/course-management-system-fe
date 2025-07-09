@@ -7,7 +7,6 @@ import useToast from "../hooks/useToast";
 import CourseFormInterface from "../interfaces/common/courseFormInterface";
 import useModal from '../hooks/useModal';
 import courseDelete from "../queries/courseDelete";
-import EditChaptersList from "../components/EditChaptersList";
 import CourseMutationResponseInterface from "../interfaces/graphql/courses/courseMutationResponseInterface";
 import ErrorInterface from "../interfaces/graphql/common/errorInterface";
 import courseWithUser from "../queries/courseWithUser";
