@@ -41,6 +41,10 @@ function EditChaptersList({ courseId }: EditChaptersListProps) {
     setChaptersData(chapters);
   }
 
+  function moveChapterUpInOrder() {}
+
+  function moveChapterDownInOrder() {}
+
   return (
     <>
       <h2 className="text-xl font-bold mt-5">Chapters</h2>

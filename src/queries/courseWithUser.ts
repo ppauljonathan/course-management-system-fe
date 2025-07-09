@@ -15,6 +15,7 @@ const courseWithUser = `
         created_at
         updated_at
       }
+      chapter_order
     }
   }
 `;

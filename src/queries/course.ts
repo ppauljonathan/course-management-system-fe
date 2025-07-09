@@ -7,6 +7,7 @@ const course = `
       created_at
       updated_at
       live
+      chapter_order
     }
   }
 `;

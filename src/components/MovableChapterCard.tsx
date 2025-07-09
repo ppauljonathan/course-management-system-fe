@@ -1,4 +1,4 @@
-import { Bars2Icon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid"
+import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid"
 import { Link, useNavigate } from 'react-router'
 
 import ChapterInterface from "../interfaces/graphql/chapters/chapterInterface";
@@ -8,6 +8,8 @@ import chapterDelete from "../queries/chapterDelete";
 import useToast from "../hooks/useToast";
 import ErrorInterface from "../interfaces/graphql/common/errorInterface";
 import ChapterMutationResponseInterface from "../interfaces/graphql/chapters/chapterMutationResponseInterface";
+import { ArrowUpIcon } from "@heroicons/react/24/solid";
+import { ArrowDownIcon } from "@heroicons/react/24/outline";
 
 interface MovableChapterCardProps {
   chapter: ChapterInterface;
@@ -57,11 +59,12 @@ function MovableChapterCard({ chapter, courseId }: MovableChapterCardProps) {
       <div className="w-full p-5 rounded-2xl border mt-5 font-bold flex">
         <p>{chapter.title}</p>
         <div className="flex ml-auto">
-          <Link to={`/courses/${courseId}/chapters/${chapter.id}/edit`}>
+          <Link to={`/courses/${courseId}/chapters/${chapter.id}/edit`} title="Edit Chapter">
             <PencilSquareIcon className="size-6 ml-2" />
           </Link>
-          <TrashIcon className="size-6 ml-2 cursor-pointer" onClick={() => setShowDeleteConfirmModal(true)} />
-          <Bars2Icon className="size-6 ml-2" />
+          <TrashIcon className="size-6 ml-2 cursor-pointer" onClick={() => setShowDeleteConfirmModal(true)} title="Delete Chapter" />
+          <ArrowUpIcon className="size-6 ml-2" title="Move Chapter Up" />
+          <ArrowDownIcon className="size-6 ml-2" title="Move Chapter Down" />
         </div>
       </div>
 
