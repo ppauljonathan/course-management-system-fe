@@ -22,6 +22,7 @@ import CourseShow from './pages/CourseShow';
 import ChapterCreate from './pages/ChapterCreate';
 import ChapterUpdate from './pages/ChapterUpdate';
 import ChapterShow from './pages/ChapterShow';
+import ChaptersIndexEdit from './pages/ChaptersIndexEdit';
 
 function App() {
   const user = useAuthUser();
@@ -44,6 +45,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/courses/new" element={<CourseCreate />} />
           <Route path="/courses/:id/edit" element={<CourseUpdate />} />
+          <Route path='/courses/:id/edit/chapters' element={ <ChaptersIndexEdit /> } />
           <Route path='/courses/:courseId/chapters/new' element={<ChapterCreate />} />
           <Route path='/courses/:courseId/chapters/:id/edit' element={<ChapterUpdate />} />
         </Route>

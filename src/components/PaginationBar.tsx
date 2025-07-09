@@ -4,9 +4,10 @@ import PageInfoInterface from "../interfaces/graphql/common/pageInfoInterface";
 
 interface PaginationBarProps {
   pageInfo: PageInfoInterface;
+  pageName?: string
 }
 
-function PaginationBar({ pageInfo }: PaginationBarProps) {
+function PaginationBar({ pageInfo, pageName = 'page' }: PaginationBarProps) {
   const baseLink = location.pathname;
   return (
     <>
@@ -16,16 +17,16 @@ function PaginationBar({ pageInfo }: PaginationBarProps) {
         {
           pageInfo.page > 1 &&
           <>
-            <Link to={`${baseLink}?page=1`} className="p-5">&lt;&lt;First</Link>
-            <Link to={`${baseLink}?page=${pageInfo.page - 1}`} className="p-5">&lt;Prev</Link>
+            <Link to={`${baseLink}?${pageName}=1`} className="p-5">&lt;&lt;First</Link>
+            <Link to={`${baseLink}?${pageName}=${pageInfo.page - 1}`} className="p-5">&lt;Prev</Link>
           </>
         }
         <div className="p-5">{pageInfo.page} / {pageInfo.totalPages}</div>
         {
           pageInfo.page < pageInfo.totalPages &&
           <>
-            <Link to={`${baseLink}?page=${pageInfo.page + 1}`} className="p-5">Next &gt;</Link>
-            <Link to={`${baseLink}?page=${pageInfo.totalPages}`} className="p-5">Last &gt;&gt;</Link>
+            <Link to={`${baseLink}?${pageName}=${pageInfo.page + 1}`} className="p-5">Next &gt;</Link>
+            <Link to={`${baseLink}?${pageName}=${pageInfo.totalPages}`} className="p-5">Last &gt;&gt;</Link>
           </>
         }
       </div>

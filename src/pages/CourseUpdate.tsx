@@ -115,7 +115,10 @@ function CourseUpdate() {
         / {courseId} / Edit
       </h1>
       <CourseForm type="update" course={courseData} />
-      <EditChaptersList courseId={courseId} />
+      {/* <EditChaptersList courseId={courseId} /> */}
+      <div className="mt-5">
+        <Link to={`/courses/${courseId}/edit/chapters`} className="text-xl font-bold text-blue-600 hover:text-blue-400">Chapters</Link>
+      </div>
       <h2 className="text-xl font-bold mt-5">Danger Zone</h2>
       <button
         className="text-lg font-medium mt-5 ml-5 p-5 rounded-2xl bg-red-500 hover:bg-red-600"

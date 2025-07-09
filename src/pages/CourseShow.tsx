@@ -11,6 +11,9 @@ import ChapterInterface from "../interfaces/graphql/chapters/chapterInterface";
 import chapters from "../queries/chapters";
 import ChapterCard from "../components/ChapterCard";
 import PaginationResponseInterface from "../interfaces/graphql/common/paginationResponseInterface";
+import PageInfoInterface from "../interfaces/graphql/common/pageInfoInterface";
+import PaginationBar from "../components/PaginationBar";
+import { useSearchParams } from "react-router";
 
 interface FetchCourseInterface {
   data: { course: CourseWithUserInterface };
@@ -41,10 +44,14 @@ function CourseShow() {
   const { id: courseId } = useParams<{ id: string }>();
   const { showToast } = useToast();
   const [course, setCourse] = useState(defaultCourse);
-  const [showAbout, setShowAbout] = useState(false);
+  const [showAbout, setShowAbout] = useState(true);
   const [showChapters, setShowChapters] = useState(true);
   const [chaptersData, setChaptersData] = useState<[ChapterInterface]>();
   const navigate = useNavigate();
+  const [pageInfo, setPageInfo] = useState<PageInfoInterface>();
+  const [searchParams] = useSearchParams();
+  const currentPage = Number(searchParams.get('chapter-page') || 1)
+  const PER_PAGE = 5;
 
   const assignCourseData = useCallback(({ data: { course: fetchedCourse } }: FetchCourseInterface) => {
     if (!fetchedCourse.live) {
@@ -56,6 +63,7 @@ function CourseShow() {
 
   const assignChaptersData = useCallback(({ data: { chapters: chaptersData } }: FetchChaptersInterface) => {
     setChaptersData(chaptersData.chapters)
+    setPageInfo(chaptersData.pageInfo)
   }, [])
 
   useEffect(() => {
@@ -70,11 +78,15 @@ function CourseShow() {
 
     sendGraphqlRequest(
       chapters,
-      { courseId: courseId },
+      {
+        courseId: courseId,
+        page: currentPage,
+        per: PER_PAGE
+      },
       assignChaptersData,
       showToast
     )
-  }, [courseId, assignCourseData, showToast, assignChaptersData]);
+  }, [courseId, assignCourseData, showToast, assignChaptersData, currentPage]);
 
   return (
     <>
@@ -133,6 +145,13 @@ function CourseShow() {
             )
           ) : null
         )
+      }
+
+      {
+        (chaptersData && chaptersData.length > 0) &&
+        showChapters &&
+        pageInfo &&
+        <PaginationBar pageInfo={pageInfo} pageName="chapter-page" />
       }
     </>
   );
