@@ -41,7 +41,7 @@ function MovableChapterCard({ chapter, courseId }: MovableChapterCardProps) {
       return;
     }
 
-    navigate(`/courses/${courseId}/edit`);
+    navigate(`/courses/${courseId}/edit/chapters`);
     showToast(`Chapter ${chapter.title} deleted successfully`, 'success')
   }
 

@@ -62,7 +62,6 @@ function ChapterUpdate() {
     async function currentUserIsOwner(owner?: UserInterface):Promise<boolean> {
       if(owner === undefined) { return false; }
 
-      console.log(owner)
       const currentUser = await getCurrentUser(showToast);
       if(currentUser?.id == owner.id) { return true; }
 
@@ -110,10 +109,10 @@ function ChapterUpdate() {
 
   return (
     <>
-     <h1 className="text-3xl font-extrabold">
+      <h1 className="text-3xl font-extrabold">
         <Link to="/courses-list/created" className="text-blue-600 hover:text-blue-400">Courses</Link> /&nbsp;
         <Link to={`/courses/${courseId}/edit`} className="text-blue-600 hover:text-blue-400">{courseId}</Link> /&nbsp;
-        <Link to={`/courses/${courseId}/edit`} className="text-blue-600 hover:text-blue-400">Chapters</Link> /&nbsp;
+        <Link to={`/courses/${courseId}/edit/chapters`} className="text-blue-600 hover:text-blue-400">Chapters</Link> /&nbsp;
         <Link to={`/courses/${courseId}/chapters/${chapterId}/edit`} className="text-blue-600 hover:text-blue-400">{chapterId}</Link> / Edit
       </h1>
 

@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import { useEffect, useState } from "react";
 
 import MovableChapterCard from "./MovableChapterCard";
@@ -7,6 +7,8 @@ import chapters from "../queries/chapters";
 import useToast from "../hooks/useToast";
 import PaginationResponseInterface from "../interfaces/graphql/common/paginationResponseInterface";
 import ChapterInterface from "../interfaces/graphql/chapters/chapterInterface";
+import PageInfoInterface from "../interfaces/graphql/common/pageInfoInterface";
+import PaginationBar from "./PaginationBar";
 
 interface EditChaptersListProps {
   courseId?: string;
@@ -18,7 +20,11 @@ interface ChaptersResponse {
 
 function EditChaptersList({ courseId }: EditChaptersListProps) {
   const [chaptersData, setChaptersData] = useState<[ChapterInterface]>()
+  const [pageInfo, setPageInfo] = useState<PageInfoInterface>();
   const { showToast } = useToast();
+  const [searchParams] = useSearchParams();
+  const currentPage = Number(searchParams.get('page') || 1)
+  const PER_PAGE = 10;
 
   useEffect(() => {
     function fetchChapters() {
@@ -26,8 +32,8 @@ function EditChaptersList({ courseId }: EditChaptersListProps) {
         chapters,
         {
           courseId: courseId,
-          page: 1,
-          per: 5
+          page: currentPage,
+          per: PER_PAGE
         },
         assignChapters,
         showToast
@@ -35,10 +41,11 @@ function EditChaptersList({ courseId }: EditChaptersListProps) {
     }
 
     fetchChapters();
-  }, [courseId, showToast])
+  }, [courseId, showToast, currentPage])
 
-  function assignChapters({ data: { chapters: { chapters}} }: ChaptersResponse) {
-    setChaptersData(chapters);
+  function assignChapters({ data: { chapters } }: ChaptersResponse) {
+    setChaptersData(chapters.chapters);
+    setPageInfo(chapters.pageInfo);
   }
 
   function moveChapterUpInOrder() {}
@@ -47,7 +54,6 @@ function EditChaptersList({ courseId }: EditChaptersListProps) {
 
   return (
     <>
-      <h2 className="text-xl font-bold mt-5">Chapters</h2>
       <div className="mt-5">
         <Link
           to={`/courses/${courseId}/chapters/new`}
@@ -68,6 +74,11 @@ function EditChaptersList({ courseId }: EditChaptersListProps) {
             </div>
           )
         )
+      }
+      {
+        (chaptersData && chaptersData.length > 0) &&
+        pageInfo &&
+        <PaginationBar pageInfo={pageInfo} pageName="page" />
       }
     </>
   );
