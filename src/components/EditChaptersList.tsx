@@ -1,4 +1,4 @@
-import { Link, useSearchParams } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import { useEffect, useState } from "react";
 
 import MovableChapterCard from "./MovableChapterCard";
@@ -9,6 +9,13 @@ import PaginationResponseInterface from "../interfaces/graphql/common/pagination
 import ChapterInterface from "../interfaces/graphql/chapters/chapterInterface";
 import PageInfoInterface from "../interfaces/graphql/common/pageInfoInterface";
 import PaginationBar from "./PaginationBar";
+import courseWithUser from "../queries/courseWithUser";
+import CourseWithUserInterface from "../interfaces/graphql/courses/courseWithUserInterface";
+import getCurrentUser from "../utils/getCurrentUser";
+import UserInterface from "../interfaces/graphql/users/userInterface";
+import courseUpdate from "../queries/courseUpdate";
+import CourseMutationResponseInterface from "../interfaces/graphql/courses/courseMutationResponseInterface";
+import ErrorInterface from "../interfaces/graphql/common/errorInterface";
 
 interface EditChaptersListProps {
   courseId?: string;
@@ -18,15 +25,49 @@ interface ChaptersResponse {
   data: { chapters: PaginationResponseInterface }
 }
 
+interface FetchCourseInterface {
+  data: { course: CourseWithUserInterface }
+}
+
+interface CourseUpdateResponse {
+  data: { courseUpdate: CourseMutationResponseInterface };
+  errors?: [ErrorInterface];
+}
+
 function EditChaptersList({ courseId }: EditChaptersListProps) {
+  const [course, setCourse] = useState<CourseWithUserInterface>()
   const [chaptersData, setChaptersData] = useState<[ChapterInterface]>()
   const [pageInfo, setPageInfo] = useState<PageInfoInterface>();
   const { showToast } = useToast();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const currentPage = Number(searchParams.get('page') || 1)
   const PER_PAGE = 10;
 
   useEffect(() => {
+    async function currentUserIsOwner(owner: UserInterface):Promise<boolean> {
+      const currentUser = await getCurrentUser(showToast);
+
+      if(currentUser?.id == owner.id) { return true; }
+
+      return false;
+    }
+
+    async function assignCourse({ data: { course: courseData } }: FetchCourseInterface) {
+      if (!courseData) {
+        showToast('Course not found', 'error');
+        navigate('/courses-list/created');
+        return;
+      }
+      if (!(await currentUserIsOwner(courseData.user))) {
+        showToast('You are not authorized to edit this course', 'error');
+        navigate('/courses-list/created');
+        return;
+      }
+
+      setCourse(courseData)
+    }
+
     function fetchChapters() {
       sendGraphqlRequest<ChaptersResponse>(
         chapters,
@@ -40,17 +81,91 @@ function EditChaptersList({ courseId }: EditChaptersListProps) {
       )
     }
 
+    function fetchCourse() {
+      sendGraphqlRequest<FetchCourseInterface>(
+        courseWithUser,
+        { id: courseId },
+        assignCourse,
+        showToast
+      )
+    }
+
+    fetchCourse()
     fetchChapters();
-  }, [courseId, showToast, currentPage])
+  }, [courseId, showToast, currentPage, navigate])
+
+
 
   function assignChapters({ data: { chapters } }: ChaptersResponse) {
     setChaptersData(chapters.chapters);
     setPageInfo(chapters.pageInfo);
   }
 
-  function moveChapterUpInOrder() {}
+  function moveChapterUpInOrder(chapterId: number) {
+    if (course === undefined) { return; }
 
-  function moveChapterDownInOrder() {}
+    const chapterOrder = course.chapter_order
+    const chapterIndex = chapterOrder.findIndex(cid => cid == chapterId)
+
+    if(chapterIndex == 0) { return; }
+
+    const switchIndex = chapterIndex - 1
+
+    const temp = chapterOrder[chapterIndex];
+    chapterOrder[chapterIndex] = chapterOrder[switchIndex];
+    chapterOrder[switchIndex] = temp;
+
+    updateChapterOrder(chapterOrder);
+  }
+
+  function moveChapterDownInOrder(chapterId: number) {
+    if (course === undefined) { return; }
+
+    const chapterOrder = course.chapter_order
+    const chapterIndex = chapterOrder.findIndex(cid => cid == chapterId)
+
+    if(chapterIndex == chapterOrder.length - 1) { return; }
+
+    const switchIndex = chapterIndex + 1
+
+    const temp = chapterOrder[chapterIndex];
+    chapterOrder[chapterIndex] = chapterOrder[switchIndex];
+    chapterOrder[switchIndex] = temp;
+
+    updateChapterOrder(chapterOrder);
+  }
+
+  function updateChapterOrder(chapterOrder: [number]): void {
+    // TODO: create a new mutation for chapterOrder update
+    sendGraphqlRequest<CourseUpdateResponse>(
+      courseUpdate,
+      {
+        course: {
+          id: courseId,
+          chapter_order: chapterOrder
+        }
+      },
+      handleCourseUpdate,
+      showToast
+    )
+  }
+
+  function handleCourseUpdate({ data, errors }: CourseUpdateResponse) {
+    if(errors && errors.length > 0) {
+      showToast(errors.map(e => e.message).join(', '), 'error');
+      return;
+    }
+
+    const { errors: userErrors } = data.courseUpdate
+
+    if(userErrors.length > 0) {
+      showToast(userErrors.map(e => e.message).join(', '), 'error');
+      return;
+    }
+
+    showToast("Chapter Order Updated Successfully", 'success');
+    navigate(`/courses/${data.courseUpdate.course.id}/edit/chapters?page=${currentPage}`);
+  }
 
   return (
     <>
@@ -66,7 +181,7 @@ function EditChaptersList({ courseId }: EditChaptersListProps) {
         chaptersData &&(
           chaptersData.length > 0 ? (
             chaptersData.map((chapter) => (
-              <MovableChapterCard key={chapter.id} chapter={chapter} courseId={courseId} />
+              <MovableChapterCard key={chapter.id} chapter={chapter} courseId={courseId} moveChapterUpInOrder={moveChapterUpInOrder} moveChapterDownInOrder={moveChapterDownInOrder} />
             ))
           ) : (
             <div className="text-lg font-bold mt-5">
