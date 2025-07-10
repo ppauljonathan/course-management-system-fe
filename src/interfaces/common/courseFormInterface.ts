@@ -3,6 +3,7 @@ interface CourseFormInterface {
   description: string;
   live: boolean;
   id?: number;
+  chapter_order?: [number]
 }
 
 export default CourseFormInterface

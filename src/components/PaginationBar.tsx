@@ -4,7 +4,7 @@ import PageInfoInterface from "../interfaces/graphql/common/pageInfoInterface";
 
 interface PaginationBarProps {
   pageInfo: PageInfoInterface;
-  pageName?: string
+  pageName?: string;
 }
 
 function PaginationBar({ pageInfo, pageName = 'page' }: PaginationBarProps) {

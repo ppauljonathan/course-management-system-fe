@@ -14,6 +14,8 @@ import { ArrowDownIcon } from "@heroicons/react/24/outline";
 interface MovableChapterCardProps {
   chapter: ChapterInterface;
   courseId?: string
+  moveChapterUpInOrder: (chapterId: number) => void;
+  moveChapterDownInOrder: (chapterId: number) => void;
 }
 
 interface DeleteChapterInterface {
@@ -24,7 +26,7 @@ interface DeleteChapterInterface {
   errors: [ErrorInterface];
 }
 
-function MovableChapterCard({ chapter, courseId }: MovableChapterCardProps) {
+function MovableChapterCard({ chapter, courseId, moveChapterUpInOrder, moveChapterDownInOrder }: MovableChapterCardProps) {
   const [DeleteConfirmModal, setShowDeleteConfirmModal] = useModal();
   const { showToast } = useToast();
   const navigate = useNavigate();
@@ -63,8 +65,8 @@ function MovableChapterCard({ chapter, courseId }: MovableChapterCardProps) {
             <PencilSquareIcon className="size-6 ml-2" />
           </Link>
           <TrashIcon className="size-6 ml-2 cursor-pointer" onClick={() => setShowDeleteConfirmModal(true)} title="Delete Chapter" />
-          <ArrowUpIcon className="size-6 ml-2" title="Move Chapter Up" />
-          <ArrowDownIcon className="size-6 ml-2" title="Move Chapter Down" />
+          <ArrowUpIcon className="size-6 ml-2" onClick={() => moveChapterUpInOrder(chapter.id)} title="Move Chapter Up" />
+          <ArrowDownIcon className="size-6 ml-2" onClick={() => moveChapterDownInOrder(chapter.id)} title="Move Chapter Down" />
         </div>
       </div>
 
