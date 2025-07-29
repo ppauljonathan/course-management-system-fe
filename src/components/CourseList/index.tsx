@@ -12,6 +12,7 @@ import PaginationBar from '../PaginationBar';
 import createdCourses from "../../queries/createdCourses";
 import useToast from "../../hooks/useToast";
 import { Link } from "react-router";
+import SearchBar from "../SearchBar";
 
 interface coursesResponse {
   data: {
@@ -25,6 +26,7 @@ function CourseList() {
   const { pathname } = useLocation();
   const [searchParams] = useSearchParams();
   const currentPage = Number(searchParams.get('page') || 1);
+  const searchTerm = String(searchParams.get('q') || '');
   const [courses, setCourses] = useState<CourseInterface[] | undefined>([]);
   const [pageInfo, setPageInfo] = useState<PageInfoInterface>();
 
@@ -51,7 +53,8 @@ function CourseList() {
         query,
         {
           page: currentPage,
-          per: PER_PAGE
+          per: PER_PAGE,
+          searchTerm: searchTerm
         },
         displayCourses,
         showToast
@@ -65,10 +68,11 @@ function CourseList() {
     }
 
     fetchCourses();
-  }, [currentPage, queryKey, showToast, query]);
+  }, [currentPage, queryKey, showToast, query, searchTerm]);
 
     return (
     <>
+      <SearchBar searchTerm={searchTerm} pathname={pathname} />
       {
         queryKey == 'createdCourses' &&
         <div className="mt-5">
