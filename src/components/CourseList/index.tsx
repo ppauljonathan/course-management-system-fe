@@ -95,7 +95,7 @@ function CourseList() {
 
             {
               queryKey === 'createdCourses' &&
-              "No courses created yet. Are you keeping all your knowledge a secret? 🤫💡"
+             "No matching courses found. Either you haven't created any yet... or your filters are hiding them! 🎭🧐"
             }
           </p>
       }
