@@ -13,6 +13,7 @@ const chapterWithCourse = `
         live
         created_at
         updated_at
+        chapter_order
         user {
           id
           first_name
