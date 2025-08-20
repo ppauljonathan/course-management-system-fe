@@ -27,13 +27,18 @@ function CourseList() {
   const [searchParams] = useSearchParams();
   const currentPage = Number(searchParams.get('page') || 1);
   const searchTerm = String(searchParams.get('q') || '');
+  const userIdsParam = searchParams.get('userIds');
+  const searchUserIds = useMemo(
+    () => JSON.parse(userIdsParam || '[]'),
+    [userIdsParam]
+  );
   const [courses, setCourses] = useState<CourseInterface[] | undefined>([]);
   const [pageInfo, setPageInfo] = useState<PageInfoInterface>();
 
   const { showToast } = useToast();
 
   const queryKey = useMemo(() => {
-    if(pathname === '/courses-list/created') return 'createdCourses';
+    if (pathname === '/courses-list/created') return 'createdCourses';
 
     return 'courses';
   }, [pathname]);
@@ -54,7 +59,8 @@ function CourseList() {
         {
           page: currentPage,
           per: PER_PAGE,
-          searchTerm: searchTerm
+          searchTerm: searchTerm,
+          userIds: searchUserIds
         },
         displayCourses,
         showToast
@@ -62,17 +68,17 @@ function CourseList() {
     }
 
     function displayCourses({ data }: coursesResponse) {
-      const courseList = data[queryKey] ;
+      const courseList = data[queryKey];
       setCourses(courseList?.courses);
       setPageInfo(courseList?.pageInfo);
     }
 
     fetchCourses();
-  }, [currentPage, queryKey, showToast, query, searchTerm]);
+  }, [currentPage, queryKey, showToast, query, searchTerm, searchUserIds]);
 
-    return (
+  return (
     <>
-      <SearchBar searchTerm={searchTerm} pathname={pathname} />
+      <SearchBar searchTerm={searchTerm} pathname={pathname} searchUserIds={searchUserIds} />
       {
         queryKey == 'createdCourses' &&
         <div className="mt-5">
@@ -87,17 +93,17 @@ function CourseList() {
 
       {
         (!courses || courses?.length == 0) &&
-          <p className="text-xl mt-5 w-full text-center font-bold">
-            {
-              queryKey === 'courses' &&
-              "Oops! No courses found. Either there’s nothing here... or your search filters are playing hide-and-seek. 🤔🔍"
-            }
+        <p className="text-xl mt-5 w-full text-center font-bold">
+          {
+            queryKey === 'courses' &&
+            "Oops! No courses found. Either there’s nothing here... or your search filters are playing hide-and-seek. 🤔🔍"
+          }
 
-            {
-              queryKey === 'createdCourses' &&
-             "No matching courses found. Either you haven't created any yet... or your filters are hiding them! 🎭🧐"
-            }
-          </p>
+          {
+            queryKey === 'createdCourses' &&
+            "No matching courses found. Either you haven't created any yet... or your filters are hiding them! 🎭🧐"
+          }
+        </p>
       }
 
       {

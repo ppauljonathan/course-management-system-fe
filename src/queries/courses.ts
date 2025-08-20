@@ -1,6 +1,6 @@
 const courses = `
-  query Courses($page: Int, $per: Int, $searchTerm: String) {
-    courses(page: $page, per: $per, searchTerm: $searchTerm) {
+  query Courses($page: Int, $per: Int, $searchTerm: String, $userIds: [Int]) {
+    courses(page: $page, per: $per, searchTerm: $searchTerm, userIds: $userIds) {
       courses {
         id
         name

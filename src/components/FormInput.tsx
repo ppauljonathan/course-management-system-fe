@@ -4,10 +4,10 @@ import FormInputLabel from "./FormInputLabel";
 interface FormInputProps {
   name: string;
   labelName: string;
-  type?: 'text' |'number' | 'password';
+  type?: 'text' | 'number' | 'password';
   required?: boolean;
   value?: string | number;
-  onChange?: (e:ChangeEvent) => void;
+  onChange?: (e: ChangeEvent) => void;
   errorMessage?: string;
   min?: number;
   max?: number;
@@ -39,9 +39,9 @@ function FormInput({
           value={value}
           onChange={onChange}
           {...(required ? { required: true } : {})}
-          {...(min !== undefined ? { min: min} : {})}
+          {...(min !== undefined ? { min: min } : {})}
           {...(max !== undefined ? { max: max } : {})}
-          {...(step !== undefined ? { step: step} : {})}
+          {...(step !== undefined ? { step: step } : {})}
         />
         {
           errorMessage &&
