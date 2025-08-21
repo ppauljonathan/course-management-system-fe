@@ -12,6 +12,7 @@ import sendGraphqlRequest from '../../utils/graphqlHandler';
 import users from '../../queries/users';
 import UserInterface from '../../interfaces/graphql/users/userInterface';
 import usersByIds from '../../queries/usersByIds';
+import { Link } from 'react-router';
 
 interface SearchBarProps {
   searchTerm: string;
@@ -121,7 +122,12 @@ function SearchBar({ searchTerm, pathname, searchUserIds }: SearchBarProps) {
               promiseOptions={loadUsersData}
             />
           }
-          <FormSubmit name='Search' />
+          <div className='flex w-fit m-auto'>
+            <FormSubmit name='Search' />
+            <div className='flex justify-center ml-5'>
+              <Link to="/courses-list/all" className='m-a text-white px-4 py-2 rounded bg-blue-800 hover:bg-blue-400 cursor-pointer'>Reset</Link>
+            </div>
+          </div>
         </form>
       }
     </>

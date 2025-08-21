@@ -96,7 +96,7 @@ function CourseShow() {
       </h1>
       <p className="text-center">
         By:&nbsp;
-        <Link to="/" className="text-blue-500 underline hover:text-blue-800">
+        <Link to={`/courses-list/all?userIds=[${course.user.id}]`} className="text-blue-500 underline hover:text-blue-800">
           {[course.user.first_name, course.user.last_name].filter(Boolean).join(" ")}
         </Link>
       </p>
