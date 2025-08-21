@@ -37,7 +37,8 @@ const defaultCourse: CourseWithUserInterface = {
     email: '',
     created_at: '',
     updated_at: '',
-  }
+  },
+  chapter_order: []
 };
 
 function CourseShow() {

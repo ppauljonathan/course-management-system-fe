@@ -29,7 +29,7 @@ function ChapterShow() {
       )
     }
 
-    function setNextAndPrevChapterLinks(chapterId?: number, chapterOrder?: [number]) {
+    function setNextAndPrevChapterLinks(chapterId?: number, chapterOrder?: number[]) {
       if (chapterId === undefined || chapterOrder === undefined) { return; }
 
       const currentIndex = chapterOrder.findIndex((val) => val == chapterId);

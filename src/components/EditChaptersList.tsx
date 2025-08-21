@@ -135,7 +135,7 @@ function EditChaptersList({ courseId }: EditChaptersListProps) {
     updateChapterOrder(chapterOrder);
   }
 
-  function updateChapterOrder(chapterOrder: [number]): void {
+  function updateChapterOrder(chapterOrder: number[]): void {
     sendGraphqlRequest<UpdateChapterOrderResponse>(
       updateChapterOrderQuery,
       {

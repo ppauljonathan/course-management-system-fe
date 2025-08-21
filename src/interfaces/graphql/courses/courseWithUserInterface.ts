@@ -8,7 +8,7 @@ interface CourseWithUserInterface {
   updated_at: string;
   live: boolean;
   user: UserInterface;
-  chapter_order: [number];
+  chapter_order: number[];
 }
 
 export default CourseWithUserInterface;
